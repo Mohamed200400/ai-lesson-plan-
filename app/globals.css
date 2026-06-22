@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap");
+
+html, body {
+  background-color: #f7f9fb;
+  color: #191c1e;
+  font-family: "IBM Plex Sans Arabic", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle paper-grid background for AI generation card */
+.bg-ai-card {
+  background: linear-gradient(135deg, #eaf2ff 0%, #d8e7ff 100%);
+}
+
+/* AI table cell tint */
+.ai-row {
+  background: linear-gradient(90deg, rgba(45, 156, 219, 0.06), rgba(45, 156, 219, 0.02));
+}
