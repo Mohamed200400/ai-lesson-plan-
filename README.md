@@ -1,7 +1,7 @@
 # Gedada — AI Lesson Planner (Next.js)
 
 Pixel-perfect Arabic (RTL) implementation of the Gedada Academic Intelligence design,
-built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, and **shadcn-style** components.
+built with **Next.js 15 (App Router)**, **TypeScript**, **Tailwind CSS**, and **shadcn-style** components.
 
 ## Screens
 
