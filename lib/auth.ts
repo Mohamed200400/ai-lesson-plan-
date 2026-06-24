@@ -8,7 +8,7 @@ export const authOptions: NextAuthOptions ={
             name: "credentials",
             credentials :{
                 email :{
-                    lebel : "Email",
+                    label : "Email",
                     type : "email",
                     placeholder: "example@email.com",
                 },
@@ -31,6 +31,9 @@ export const authOptions: NextAuthOptions ={
         strategy: "jwt",
     },
     secret: process.env.NEXTAUTH_SECRET,
+    pages: {
+        signIn: '/auth/login', 
+    },
     callbacks :{
         async jwt({token ,user}){
             if (user){
