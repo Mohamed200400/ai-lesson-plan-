@@ -1,0 +1,139 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+// ================= Enums ================= //
+
+enum EducationalLevel {
+  First
+  Second
+  Third
+  Fourth
+  Fifth
+  Sixth
+}
+
+enum PedagogicalApproach {
+  TheConstructivist
+  InquiryBasedLearning
+  CollaborativeApproach
+  DirectInstruction
+}
+
+// 💳 New: Subscription plan tiers
+enum PlanTier {
+  FREE
+  PRO
+  PREMIUM
+}
+
+// 💳 New: Standard payment statuses synced from webhooks
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  UNPAID
+  INCOMPLETE
+}
+
+model User {
+  id           String            @id @default(cuid())
+  email        String            @unique
+  name         String
+  image        String?          
+  country      String?
+  defaultLevel EducationalLevel?
+
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  // Relations
+  lessonPlans  LessonPlan[]
+  savedLessons SavedLesson[]
+  likes        Like[]
+  comments     Comment[]
+
+  // 💳 Integrated Payment Gateway Fields (Simple Option)
+  // These are optional (?) because new users start without payment records
+  stripeCustomerId     String?             @unique 
+  stripeSubscriptionId String?             @unique
+  plan                 PlanTier            @default(FREE)
+  subscriptionStatus   SubscriptionStatus? 
+  currentPeriodEnd     DateTime?           // Expiration date of the paid billing cycle
+}
+
+model LessonPlan {
+  id                  String             @id @default(cuid())
+  title               String             
+  subject             String             
+  level               EducationalLevel   
+  duration            Int                
+  pedagogicalApproach PedagogicalApproach 
+  content             Json               
+  tags                String[]           
+
+  // Community Hub Features
+  isPublic            Boolean            @default(false)
+  downloadsCount      Int                @default(0)
+
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  // Relations
+  userId              String
+  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  savedByUsers        SavedLesson[]
+  likes               Like[]             
+  comments            Comment[]          
+}
+
+model SavedLesson {
+  id           String     @id @default(cuid())
+  savedAt      DateTime   @default(now())
+
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  lessonPlanId String
+  lessonPlan   LessonPlan @relation(fields: [lessonPlanId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonPlanId]) 
+}
+
+model Like {
+  id           String     @id @default(cuid())
+  createdAt    DateTime   @default(now())
+
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  lessonPlanId String
+  lessonPlan   LessonPlan @relation(fields: [lessonPlanId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonPlanId])
+}
+
+model Comment {
+  id           String     @id @default(cuid())
+  content      String     
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  lessonPlanId String
+  lessonPlan   LessonPlan @relation(fields: [lessonPlanId], references: [id], onDelete: Cascade)
+}
