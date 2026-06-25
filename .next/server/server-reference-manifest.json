@@ -1,5 +1,19 @@
 {
-  "node": {},
+  "node": {
+    "60e030046eb5202593995bed12969beb7e4c3a19ee": {
+      "workers": {
+        "app/auth/register/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cauth%5C%5Cregister%5C%5Cactions.ts%22%2C%5B%7B%22id%22%3A%2260e030046eb5202593995bed12969beb7e4c3a19ee%22%2C%22exportedName%22%3A%22registerUser%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cauth%5C%5Cregister%5C%5Cactions.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": true
+        }
+      },
+      "layer": {
+        "app/auth/register/page": "action-browser"
+      },
+      "filename": "../C:\\ai lesson plan generator\\gedada-nextjs\\gedada-nextjs\\app\\auth\\register\\actions.ts",
+      "exportedName": "registerUser"
+    }
+  },
   "edge": {},
   "encryptionKey": "wpqfEW4mzHCc+kdH6HlDTORZyGEuLiU/vaC6GLM+rno="
 }

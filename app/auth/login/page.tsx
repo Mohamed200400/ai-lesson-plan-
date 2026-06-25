@@ -23,6 +23,7 @@ export default function LoginPage() {
       password,
       redirect: false, // Prevents automatic hard reloading
     });
+  
 
     if (res?.error) {
       setError("Invalid credentials. Please try again.");
@@ -133,8 +134,9 @@ export default function LoginPage() {
               أنشئ حساباً جديداً
             </Link>
           </p>
+          {error && <p className="mt-8 text-center text-sm text-slate-600" style={{ color: "red" }}>{error}</p>}
         </div>
-        {error && <p className="mt-8 text-center text-sm text-slate-600" style={{ color: "red" }}>{error}</p>}
+        
       </div>
     </div>
   );

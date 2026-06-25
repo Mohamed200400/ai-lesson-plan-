@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { Eye, EyeOff, Mail, Lock, User, BookOpen, GraduationCap } from "lucide-react";
 import { useRouter } from "next/navigation";
 import prisma from "@/lib/db";
+import { registerUser } from "./actions";
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,25 +17,19 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
-    if (password !== confirmPassword) {
-      setError("كلمات المرور غير متطابقة");
-    }
-    
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
+  const [state ,formAction ,isPending] = useActionState(registerUser, {
+    success: false,
+    error: null,
+  });
 
-    if (existingUser) {
-      setError("هذا البريد الإلكتروني مستخدم بالفعل");
-  
-    }
-      
+  useEffect(()=>{
     
+    if (state.success){
+      router.push("/auth/login")
+    }
+  },[state.success, router])
 
-  }
+
   return (
     <div className="min-h-screen flex" dir="rtl">
       {/* Brand Panel */}
@@ -77,13 +72,14 @@ export default function RegisterPage() {
           <h2 className="text-3xl font-bold text-slate-900 mb-2">إنشاء حساب جديد</h2>
           <p className="text-slate-600 mb-8">ابدأ رحلتك التعليمية معنا اليوم</p>
 
-          <form className="space-y-5" onSubmit={handleSubmit}>
+          <form className="space-y-5" action={formAction}>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">الاسم الكامل</label>
               <div className="relative">
                 <User className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input 
                 value={name} 
+                name="name"
                 onChange={(e)=> setName(e.target.value)} 
                 type="text" 
                 placeholder=" " 
@@ -96,6 +92,7 @@ export default function RegisterPage() {
               <div className="relative">
                 <Mail className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input 
+                name="email"
                 value={email} 
                 onChange={(e)=> setEmail(e.target.value)}
                 type="email" 
@@ -111,6 +108,7 @@ export default function RegisterPage() {
               <div className="relative">
                 <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input 
+                name="password"
                 value={password} 
                 onChange={(e)=> setPassword(e.target.value)}
                 type={showPassword ? "text" : "password"} 
@@ -147,6 +145,7 @@ export default function RegisterPage() {
                 <Link href="/privacy" className="text-indigo-600 hover:text-indigo-700 font-medium">سياسة الخصوصية</Link>
               </span>
             </label>
+            {state.error && <p style={{ color: "red" }}>{state.error}</p>}
 
             <button type="submit" className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold hover:from-indigo-700 hover:to-purple-700 transition shadow-lg shadow-indigo-200">
               إنشاء الحساب

@@ -1,5 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import prisma from "./db";
+import bcrypt from "bcrypt";
 
 
 export const authOptions: NextAuthOptions ={
@@ -19,10 +21,33 @@ export const authOptions: NextAuthOptions ={
             },
             async authorize(credentials){
                 
-                return{
-                    id : "1",
-                    name: "med"
+                if (!credentials?.email || !credentials?.password) {
+                    return null; // Returning null tells NextAuth the sign-in failed
                 }
+
+                // 2. Look for the user in your database via Prisma
+                const user = await prisma.user.findUnique({
+                    where: { email: credentials.email }
+                });
+
+                // 3. If the user doesn't exist, stop here
+                if (!user) {
+                    return null; 
+                }
+
+                // 4. Compare the typed password with the hashed password in the DB
+                const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
+
+                if (!isPasswordValid) {
+                    return null; 
+                }
+
+                // 5. Success! Return the user data (NextAuth will now generate a valid session)
+                return {
+                    id: user.id,
+                    email: user.email,
+                    name: user.name,
+                };
             }
         }),
 
