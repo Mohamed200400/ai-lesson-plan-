@@ -7,7 +7,7 @@ const  SideBarWrapper = () => {
     const hiddenRoutes = ['/auth/login','/auth/register']
     
     const pathname = usePathname()
-    console.log(pathname)
+   
   
         if (hiddenRoutes.includes(pathname)) {return null}
         return <Sidebar />

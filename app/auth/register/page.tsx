@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useActionState, useEffect, useState } from "react";
-import { Eye, EyeOff, Mail, Lock, User, BookOpen, GraduationCap } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, BookOpen, GraduationCap, LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import prisma from "@/lib/db";
 import { registerUser } from "./actions";
@@ -10,9 +10,7 @@ import { registerUser } from "./actions";
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
@@ -78,9 +76,9 @@ export default function RegisterPage() {
               <div className="relative">
                 <User className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input 
-                value={name} 
+            
                 name="name"
-                onChange={(e)=> setName(e.target.value)} 
+             
                 type="text" 
                 placeholder=" " 
                 className="w-full pr-11 pl-4 py-3 rounded-xl border border-slate-200 bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition" />
@@ -93,8 +91,7 @@ export default function RegisterPage() {
                 <Mail className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input 
                 name="email"
-                value={email} 
-                onChange={(e)=> setEmail(e.target.value)}
+           
                 type="email" 
                 placeholder="name@example.com" 
                 className="w-full pr-11 pl-4 py-3 rounded-xl border border-slate-200 bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition" />
@@ -109,8 +106,7 @@ export default function RegisterPage() {
                 <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input 
                 name="password"
-                value={password} 
-                onChange={(e)=> setPassword(e.target.value)}
+    
                 type={showPassword ? "text" : "password"} 
                 placeholder="••••••••" 
                 className="w-full pr-11 pl-11 py-3 rounded-xl border border-slate-200 bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none transition" />
@@ -148,7 +144,13 @@ export default function RegisterPage() {
             {state.error && <p style={{ color: "red" }}>{state.error}</p>}
 
             <button type="submit" className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold hover:from-indigo-700 hover:to-purple-700 transition shadow-lg shadow-indigo-200">
-              إنشاء الحساب
+             {isPending ? <LoaderCircle 
+                    className="animate-spin text-blue-500 mx-auto" 
+                    size={30}
+                    strokeWidth={2} 
+                  /> :" إنشاء الحساب"}  
+             
+             
             </button>
           </form>
 

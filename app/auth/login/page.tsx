@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Eye, EyeOff, Mail, Lock, GraduationCap } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, GraduationCap, LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
@@ -11,12 +11,14 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isPending, setIsPending] = useState(false);
+
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-
+    setIsPending(true)
     // Trigger NextAuth credentials sign-in
     const res = await signIn("credentials", {
       email,
@@ -27,6 +29,7 @@ export default function LoginPage() {
 
     if (res?.error) {
       setError("Invalid credentials. Please try again.");
+      setIsPending(false)
     } else {
       console.log(res)
       // Redirect to dashboard or home page on success
@@ -122,7 +125,11 @@ export default function LoginPage() {
               type="submit"
               className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold hover:from-indigo-700 hover:to-purple-700 transition shadow-lg shadow-indigo-200"
             >
-              تسجيل الدخول
+            {isPending ? <LoaderCircle 
+                    className="animate-spin text-blue-500 mx-auto" 
+                    size={30}
+                    strokeWidth={2} 
+                  /> :"تسجيل الدخول"}  
             </button>
           </form>
 

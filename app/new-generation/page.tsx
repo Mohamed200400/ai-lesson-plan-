@@ -1,81 +1,49 @@
+"use client"
 import { TopBar } from "@/components/layout/topbar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import { FileEdit, Sparkles, Lightbulb, Printer, Download, ChevronDown } from "lucide-react";
+import { useState } from "react";
 
 export default function NewGenerationPage() {
+  const [title, setTitle] = useState("");
+  const [subject, setSubject] = useState("");
+  const [level, setLevel] = useState("");
+  const [time,setTime] = useState("45");
+  const [pedagogie,setPedagogie] = useState("");
+ const subjects = [
+  "اللغة العربية",
+  "الرياضيات",
+  "الإيقاظ العلمي",
+  "اللغة الفرنسية",
+  "اللغة الإنكليزية",
+  "التاريخ",
+  "الجغرافيا",
+  "التربية الإسلامية",
+  "التربية المدنية",
+  "التربية التشكيلية",
+  "التربية الموسيقية",
+  "التربية البدنية",
+  "التربية التقنية"
+]
+const levels = ["السنة الأولى", "السنة الثانية", "السنة الثالثة", "السنة الرابعة", "السنة الخامسة", "السنة السادسة"];
+const pedagogies = [
+  "المقاربة البنائية",
+  "التعلم القائم على التقصي",
+  "المقاربة التعاونية",
+  "التعليم المباشر"
+]
+
   return (
     <div className="min-h-screen">
       <TopBar placeholder="البحث..." />
       <div className="px-6 lg:px-10 pb-12">
         <h1 className="mb-6 text-right text-headline-md font-bold text-on-surface">إنشاء جذاذة جديدة</h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 lg:gap-8" dir="rtl">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 lg:gap-8" dir="ltr">
           {/* Form (right column in RTL) */}
-          <div className="space-y-5 order-1 lg:order-2">
-            <Card>
-              <div className="flex items-center justify-between border-b border-outline-variant/60 px-5 py-4">
-                <FileEdit className="h-5 w-5 text-primary" />
-                <h2 className="text-title-lg font-semibold text-primary">المعطيات الأساسية</h2>
-              </div>
-              <div className="p-5 space-y-4">
-                <div>
-                  <Label>عنوان الدرس</Label>
-                  <Input defaultValue="الجهاز الهضمي" className="text-right" />
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <Label>المادة</Label>
-                    <SelectFake value="النشاط العلمي" />
-                  </div>
-                  <div>
-                    <Label>المستوى</Label>
-                    <SelectFake value="المستوى الرابع" />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <Label>المكون</Label>
-                    <SelectFake value="علوم الحياة" />
-                  </div>
-                  <div>
-                    <Label>المدة الزمنية</Label>
-                    <div className="relative">
-                      <Input defaultValue="45" className="text-right pr-12" />
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-caption text-on-surface-variant">دقيقة</span>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <Label className="flex items-center justify-between">
-                    <Sparkles className="h-3.5 w-3.5 text-success" />
-                    <span>المقاربة البيداغوجية</span>
-                  </Label>
-                  <div className="rounded-md border-2 border-success/40 bg-paper">
-                    <SelectFake value="المقاربة بالكفايات" />
-                  </div>
-                </div>
-                <Button size="lg" className="w-full">
-                  <Sparkles className="h-4 w-4" />
-                  توليد الجذاذة
-                </Button>
-              </div>
-            </Card>
-
-            {/* AI suggestion */}
-            <Card className="border-success/30 bg-ai-tint">
-              <div className="p-4 flex gap-3">
-                <Lightbulb className="h-5 w-5 text-success shrink-0" />
-                <div className="text-right">
-                  <div className="text-label-md font-semibold text-on-surface">اقتراح الذكاء الاصطناعي</div>
-                  <p className="mt-1 text-caption text-on-surface-variant leading-6">
-                    بناءً على اختيارك لدرس &quot;الجهاز الهضمي&quot; والمستوى الرابع، ننصح بإدراج نشاط استكشاف باستخدام مجسم أو فيديو توضيحي في بداية الحصة.
-                  </p>
-                </div>
-              </div>
-            </Card>
-          </div>
+          
 
           {/* Preview (left column in RTL) */}
           <Card className="order-2 lg:order-1 overflow-hidden">
@@ -153,6 +121,82 @@ export default function NewGenerationPage() {
               </div>
             </div>
           </Card>
+          {/*form */}
+          <div className="space-y-5 order-1 lg:order-2">
+            <Card>
+              <div className="flex items-center justify-between border-b border-outline-variant/60 px-5 py-4">
+                <FileEdit className="h-5 w-5 text-primary" />
+                <h2 className="text-title-lg font-semibold text-primary">المعطيات الأساسية</h2>
+              </div>
+              <div className="p-5 space-y-4">
+                <div>
+                  <Label className="text-right">عنوان الدرس</Label>
+                  <Input 
+                  placeholder={"اختر العنوان"}
+                    value={title}
+                    onChange={(e)=> setTitle(e.target.value)}
+                    className="text-right"
+                   />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label className="text-right">المادة</Label>
+                    <select className="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pr-3 pl-10 text-sm text-gray-900 shadow-sm outline-none transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-green-200">
+                      <option value="" >اختر المادة...</option>
+                      {subjects.map((e)=>(
+                        <option key={e} value={e}>{e}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <Label className="text-right">المستوى</Label>
+                    <select className="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pr-3 pl-10 text-sm text-gray-900 shadow-sm outline-none transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-green-200">
+                      <option value="" >اختر المستوى..</option>
+                      {levels.map((e)=>(
+                        <option key={e} value={e}>{e}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                  
+                  </div>
+                  <div>
+                    <Label className="text-right">المدة الزمنية</Label>
+                    <div className="relative">
+                      <Input 
+                      value={time}
+                      onChange={(e)=> setTime(e.target.value)}
+              
+                      className="text-right pr-12" />
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-caption text-on-surface-variant">دقيقة</span>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <Label className="flex items-center justify-between">
+                    <Sparkles className="h-3.5 w-3.5 text-success" />
+                    <span className="text-right">المقاربة البيداغوجية</span>
+                  </Label>
+                  <div className="rounded-md border-2 border-success/40 bg-paper">
+                   <select className="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pr-3 pl-10 text-sm text-gray-900 shadow-sm outline-none transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-green-200">
+                      <option value="" className="bg-white text-gray-800 font-medium text-right">اختر البيداغوجيا.</option>
+                      {pedagogies.map((e)=>(
+                        <option className="bg-white text-gray-800 font-medium text-right" key={e} value={e}>{e}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <Button size="lg" className="w-full">
+                  <Sparkles className="h-4 w-4" />
+                  توليد الجذاذة
+                </Button>
+              </div>
+            </Card>
+
+            
+          </div>
         </div>
       </div>
     </div>
