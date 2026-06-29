@@ -6,8 +6,14 @@ import { Input, Label } from "@/components/ui/input";
 import { FileEdit, Sparkles, Lightbulb, Printer, Download, ChevronDown } from "lucide-react";
 import { useActionState, useState } from "react";
 import { generateLesson } from "../actions/lesson";
+import { useSession } from "next-auth/react";
 const partialParse = require('partial-json-parser');
 
+interface MetaState {
+  success: boolean | null;
+  message: string;
+  id: string | null;
+}
 interface FormState {
   success: boolean | null;
   message: string;
@@ -19,6 +25,16 @@ interface SectionProps {
 }
 
 export default function NewGenerationPage() {
+  const {data : session} = useSession();
+  //@ts-ignore
+  const userId = session?.user?.id
+  
+  const [meta, setMeta] = useState<MetaState>({
+    success: null,
+    message: "",
+    id: null,
+  });
+
   const subjects = [
   "اللغة العربية",
   "الرياضيات",
@@ -47,13 +63,22 @@ const [state, formAction, isPending] = useActionState(
   async (prevState: FormState, formData: FormData): Promise<FormState> => {
     setStreamedText("");
     setLessonData(null)
+    setMeta({ success: null, message: "", id: null });
 
     try {
       // 🔥 مرر الـ formData كما هي للسيرفر أكشن مباشرة!
-      const stream = await generateLesson("user_123", formData);
+      const stream = await generateLesson(userId , formData);
 
       let accumulatedText =""
       for await (const chunk of stream) {
+        if (chunk.startsWith("||METADATA||")) {
+            const jsonString = chunk.replace("||METADATA||", "");
+            const parsedMeta = JSON.parse(jsonString) as MetaState;
+            
+            setMeta(parsedMeta); // تخزين النجاح، الرسالة، والـ ID فورا!
+            continue; // إنهاء الدورة الحالية وعدم تمرير السطر للـ JSON Parser
+          }
+
         accumulatedText += chunk;
         setStreamedText(accumulatedText);
      
@@ -70,6 +95,11 @@ const [state, formAction, isPending] = useActionState(
       return { success: true, message: "تمت صياغة وحفظ الجذاذة بنجاح!" };
 
     } catch (error) {
+      setMeta({
+          success: false,
+          message: "حدث خطأ غير متوقع في خط الاتصال بالخادم.",
+          id: null,
+        });
       console.error("حدث خطأ أثناء البث:", error);
       return { success: false, message: "حدث خطأ غير متوقع أثناء التوليد." };
     }
@@ -83,7 +113,8 @@ const [state, formAction, isPending] = useActionState(
  const [state, formAction, isPending] = useActionState(generateLesson, initialState);*/
  
  
-console.log(lessonData)
+//console.log(lessonData)
+
 let data = lessonData
 
   return (

@@ -15,21 +15,7 @@ datasource db {
 
 // ================= Enums ================= //
 
-enum EducationalLevel {
-  First
-  Second
-  Third
-  Fourth
-  Fifth
-  Sixth
-}
 
-enum PedagogicalApproach {
-  TheConstructivist
-  InquiryBasedLearning
-  CollaborativeApproach
-  DirectInstruction
-}
 
 // 💳 New: Subscription plan tiers
 enum PlanTier {
@@ -54,7 +40,7 @@ model User {
   name         String
   image        String?          
   country      String?
-  defaultLevel EducationalLevel?
+  defaultLevel String?
 
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
@@ -78,11 +64,11 @@ model LessonPlan {
   id                  String             @id @default(cuid())
   title               String             
   subject             String             
-  level               EducationalLevel   
+  level               String   
   duration            Int                
-  pedagogicalApproach PedagogicalApproach 
+  pedagogicalApproach String 
   content             Json               
-  tags                String[]           
+       
 
   // Community Hub Features
   isPublic            Boolean            @default(false)

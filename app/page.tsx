@@ -2,7 +2,7 @@ import { TopBar } from "@/components/layout/topbar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/input";
-import { Plus, Zap, Folder, FolderPlus, FileText, Sparkles, Calculator, FlaskConical } from "lucide-react";
+import { Plus, Zap, Folder, FolderPlus, FileText, Sparkles, Calculator, FlaskConical, ArrowLeft, Calendar, BookOpen } from "lucide-react";
 import prisma from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -21,6 +21,7 @@ export default async function DashboardPage() {
         const lessons = await prisma.lessonPlan.findMany({
           where : {  userId },
         })
+        console.log(lessons)
         const lessonCount = lessons.length
         
         const sharedLesson = await prisma.lessonPlan.findMany({
@@ -102,22 +103,76 @@ export default async function DashboardPage() {
               </div>
             </Card>
 
-            {/*{lesson.map((q) => (
-              <Card key={q.title} className="p-6 flex flex-col justify-between min-h-[220px]">
+            {/*{lessons.map((q) => (
+              <Card key={q.id} className="p-6 flex flex-col justify-between min-h-[220px]">
                 <div className="flex items-start justify-between">
                   <div className="grid h-9 w-9 place-items-center rounded-md bg-surface-low">
-                    <q.icon className="h-4 w-4 text-primary" />
+                 
                   </div>
-                  <Badge>{q.tag}</Badge>
+                  <Badge>{q.subject}</Badge>
                 </div>
-                <div className="text-right">
-                  <h3 className="text-title-lg font-semibold text-on-surface">{q.title}</h3>
-                  <p className="mt-1 text-caption text-on-surface-variant">{q.sub}</p>
-                  <Button variant="outline" className="mt-4 w-full">استكمال</Button>
+                <div className="flex flex-wrap  ">
+                  
+                  <h3 className="w-1/2 flex-1 text-title-lg font-semibold text-on-surface">العنوان :{q.title}</h3>
+                  <h3 className="w-1/2 flex-1 mt-1 text-caption text-on-surface-variant">{q.subject}</h3>
+                  <h3 className="w-1/2 flex-1 text-title-lg font-semibold text-on-surface">{q.title}</h3>
+                  <h3 className="w-1/2 flex-1 mt-1 text-caption text-on-surface-variant">{q.subject}</h3>
+                  
                 </div>
               </Card>
                    
             ))}*/}
+            
+  {lessons.map((q) => (
+    <Card
+      key={q.id}
+      className="group relative p-6 flex flex-col justify-between min-h-[240px] bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md hover:border-emerald-100 transition-all duration-300 transform hover:-translate-y-1"
+    >
+      <div>
+        {/* الجزء العلوي: الأيقونة والـ Badge */}
+        <div className="flex items-center justify-between mb-5">
+          <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
+            <BookOpen className="w-5 h-5" />
+          </div>
+          <span className="px-3 py-1 text-sm font-semibold rounded-full bg-slate-50 text-slate-600 border border-slate-100">
+            {q.subject}
+          </span>
+        </div>
+
+        {/* الجزء الأوسط: عنوان الجذاذة والتفاصيل */}
+        <div className="space-y-2">
+          <span className="text-sm font-bold text-emerald-600 uppercase tracking-wider block">
+            جذاذة نموذجية
+          </span>
+          <h3 className="text-xl font-bold text-[#1e5a8e] line-clamp-2 leading-snug group-hover:text-emerald-700 transition-colors">
+            {q.title}
+          </h3>
+          {q.level && (
+            <p className="text-sm text-gray-500">
+              المستوى: <span className="font-medium text-gray-800">{q.level}</span>
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* الجزء السفلي: فوتر الكارد مع زر الانتقال */}
+      <div className="mt-6 pt-4 border-t border-gray-50 flex items-center justify-between text-xs text-gray-400">
+        <div className="flex items-center gap-1.5">
+          <Calendar className="w-3.5 h-3.5 text-gray-400" />
+          <span>المقاربة بالكفايات</span>
+        </div>
+        
+        <Link
+          href={`/lessons/${q.id}`}
+          className="flex items-center gap-1 text-emerald-600 font-bold hover:text-emerald-700 transition-colors group/btn"
+        >
+          <span>عرض الجذاذة</span>
+          <ArrowLeft className="w-4 h-4 transform group-hover/btn:-translate-x-1 transition-transform duration-200" />
+        </Link>
+      </div>
+    </Card>
+  ))}
+
           </div>
         </section>
 

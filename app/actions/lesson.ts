@@ -1,13 +1,16 @@
 "use server"
 
+import prisma from "@/lib/db"
 import { GoogleGenAI, Type } from "@google/genai"
 
 export async function* generateLesson(userId:string , formData: FormData){
-    const title = formData.get("title")
-    const subject = formData.get("subject")
-    const level = formData.get("level")
-    const time = formData.get("time")
-    const pedagogie = formData.get("pedagogie")
+    const title = formData.get("title") as string
+    const subject = formData.get("subject") as string
+    const level = formData.get("level") as string
+    console.log(typeof level)
+    const time = formData.get("time") 
+    const duration = Number(time)
+    const pedagogie = formData.get("pedagogie") as string
  
     if (!title || !subject || !level || !time || !pedagogie){
        
@@ -114,25 +117,41 @@ export async function* generateLesson(userId:string , formData: FormData){
       yield chunk.text; // 
     }
   }
-      /*try {
-        // 2. Call the Gemini API using the recommended gemini-2.5-flash model
-        
-    
-        // 3. Return the generated text
-        
-        
-        console.log(fullText)
-        return { 
-          success: true, 
-          message: fullText || 'No response generated.' 
-        };
-      } catch (error) {
-        console.error('Gemini API Error:', error);
-        return { 
-          success: false, 
-          message: 'Failed to generate content. Please try again.' 
-        };
-      }*/
+      
+     
+      try{
+        const content = JSON.parse(fullText)
 
+        const res = await prisma.lessonPlan.create({
+          data : {
+            title : title ,
+            subject : subject ,
+            level : level ,
+            duration : duration ,
+            pedagogicalApproach : pedagogie ,
+            content : content,
+            userId : userId
+          
+          }
+        })
+        const successMeta = {
+          success: true,
+          message: "تم توليد الجذاذة وحفظها في قاعدة البيانات بنجاح!",
+          id: res.id,
+        };
+    
+    yield `||METADATA||${JSON.stringify(successMeta)}`;
+
+      }catch(e){
+        console.log(e)
+        const errorMeta = {
+      success: false,
+      message: "تم توليد النص ولكن فشل الحفظ في قاعدة البيانات.",
+      id: null,
+    };
+
+    yield `||METADATA||${JSON.stringify(errorMeta)}`;
+
+      }
     
 }
