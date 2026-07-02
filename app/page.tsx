@@ -103,7 +103,8 @@ export default async function DashboardPage() {
               </div>
             </Card>
 
-            {/*{lessons.map((q) => (
+            {/*{lessons.map((q) =>
+             (
               <Card key={q.id} className="p-6 flex flex-col justify-between min-h-[220px]">
                 <div className="flex items-start justify-between">
                   <div className="grid h-9 w-9 place-items-center rounded-md bg-surface-low">
