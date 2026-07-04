@@ -4,6 +4,7 @@
 
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap");
 
+
 html, body {
   background-color: #f7f9fb;
   color: #191c1e;
@@ -20,3 +21,4 @@ html, body {
 .ai-row {
   background: linear-gradient(90deg, rgba(45, 156, 219, 0.06), rgba(45, 156, 219, 0.02));
 }
+

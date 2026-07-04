@@ -21,7 +21,7 @@ export default async function DashboardPage() {
         const lessons = await prisma.lessonPlan.findMany({
           where : {  userId },
         })
-        console.log(lessons)
+        
         const lessonCount = lessons.length
         
         const sharedLesson = await prisma.lessonPlan.findMany({

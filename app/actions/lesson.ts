@@ -155,3 +155,18 @@ export async function* generateLesson(userId:string , formData: FormData){
       }
     
 }
+
+export async function updateLessonContent(lessonId: string, updatedContent: any) {
+  try {
+    await prisma.lessonPlan.update({
+      where: { id: lessonId },
+      data: {
+        content: updatedContent, // حفظ كائن الـ JSON المعدل بالكامل
+      },
+    });
+    return { success: true, message: "تم حفظ التعديلات بنجاح!" };
+  } catch (error) {
+    console.error("فشل تحديث الجذاذة:", error);
+    return { success: false, message: "فشل حفظ التعديلات في قاعدة البيانات." };
+  }
+}
