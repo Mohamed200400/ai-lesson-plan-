@@ -4,16 +4,16 @@ import { TopBar } from "@/components/layout/topbar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
-import { FileEdit, Sparkles, Lightbulb, Printer, Download, ChevronDown, Check, X } from "lucide-react";
+import { FileEdit, Sparkles, Lightbulb, Printer, Download, ChevronDown, Check, X, Save, Loader2 } from "lucide-react";
 import { useActionState, useState } from "react";
-import { generateLesson } from "../actions/lesson";
+import { generateLesson, updateLessonContent } from "../actions/lesson";
 import { useSession } from "next-auth/react";
 const partialParse = require('partial-json-parser');
 
 interface MetaState {
   success: boolean | null;
   message: string;
-  id: string | null;
+  id: string ;
 }
 interface FormState {
   success: boolean | null;
@@ -33,7 +33,7 @@ export default function NewGenerationPage() {
   const [meta, setMeta] = useState<MetaState>({
     success: null,
     message: "",
-    id: null,
+    id: "",
   });
 
   const subjects = [
@@ -61,6 +61,9 @@ export default function NewGenerationPage() {
   const [streamedText, setStreamedText] = useState("");
   const [lessonData, setLessonData] = useState<any>(null);
   const [edit, setEdit] = useState(false);
+
+  const [savingStatus,setSavingStatus] = useState("idle") 
+
 
   // 🛠️ State Management Handlers for Inline Editing
   const handleFieldChange = (field: string, value: string) => {
@@ -91,7 +94,7 @@ export default function NewGenerationPage() {
       setStreamedText("");
       setLessonData(null)
       setEdit(false);
-      setMeta({ success: null, message: "", id: null });
+      setMeta({ success: null, message: "", id: "" });
 
       try {
         const stream = await generateLesson(userId, formData);
@@ -122,7 +125,7 @@ export default function NewGenerationPage() {
         setMeta({
           success: false,
           message: "حدث خطأ غير متوقع في خط الاتصال بالخادم.",
-          id: null,
+          id: "",
         });
         console.error("حدث خطأ أثناء البث:", error);
         return { success: false, message: "حدث خطأ غير متوقع أثناء التوليد." };
@@ -130,6 +133,26 @@ export default function NewGenerationPage() {
     },
     { success: null, message: "" }
   );
+  
+  const handleSaveToLibrary = async ()=>{
+    try{
+      setSavingStatus("saving") 
+      const res = await updateLessonContent(meta.id,lessonData)
+      
+      if (res.success){
+        setSavingStatus("saved")
+        setTimeout(() => {
+        setSavingStatus("idle");
+        setTimeout(() => {
+          setEdit(prev => !prev)
+        }, 3000);
+      }, 3000);
+      }
+    }catch(e){
+
+    }
+    
+  }
 
   let data = lessonData;
 
@@ -158,27 +181,59 @@ export default function NewGenerationPage() {
                       <Download className="w-5 h-5" />
                     </button>
                     
+                    {edit ? 
+                     <button
+      type="button"
+      
+      onClick={() => handleSaveToLibrary()}
+      className={`
+        flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold
+        transition-all duration-250 shadow-sm border
+        ${savingStatus === "idle"? "bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-600 hover:shadow-md active:scale-95" : ""}
+        ${savingStatus === "saving" ? "bg-emerald-50 text-emerald-700 border-emerald-200 cursor-not-allowed" : ""}
+        ${savingStatus === "saved" ? "bg-emerald-100 text-emerald-800 border-emerald-300 shadow-none cursor-default" : ""}
+      `}
+      dir="rtl"
+    >
+    
+      {savingStatus === "idle" && (
+        <>
+          <Save className="w-4 h-4 transition-transform group-hover:scale-110" />
+          <span>حفظ التغييرات</span>
+        </>
+      )}
+
+     
+      {savingStatus === "saving" && (
+        <>
+          <Loader2 className="w-4 h-4 animate-spin text-emerald-600" />
+          <span>جاري حفظ البيانات...</span>
+        </>
+      )}
+
+     
+      {savingStatus === "saved" && (
+        <>
+          <Check className="w-4 h-4 text-emerald-700 stroke-[3]" />
+          <span>تم الحفظ بنجاح</span>
+        </>
+      )}
+    </button> :
+                    
                     <button 
                       type="button" 
                       onClick={() => setEdit(!edit)} 
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                        edit 
-                          ? "bg-amber-100 text-amber-800 hover:bg-amber-200" 
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                      }`}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors  bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      `}
                     >
-                      {edit ? (
-                        <>
-                          <Check className="w-4 h-4 text-amber-700" />
-                          <span>حفظ التعديلات</span>
-                        </>
-                      ) : (
+                      
                         <>
                           <FileEdit className="w-4 h-4 text-gray-600" />
                           <span>تعديل الجذاذة</span>
                         </>
-                      )}
-                    </button>
+                      
+                    </button>}
+                   
                   </div>
                   
                   <div className="flex items-center gap-2 text-gray-800 font-semibold">

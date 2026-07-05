@@ -170,3 +170,15 @@ export async function updateLessonContent(lessonId: string, updatedContent: any)
     return { success: false, message: "فشل حفظ التعديلات في قاعدة البيانات." };
   }
 }
+
+export async function getLessonById(lessonId: string) {
+  try {
+    const lesson = await prisma.lessonPlan.findUnique({
+      where: { id: lessonId },
+     
+     })
+    return lesson
+    }catch(e){
+
+      }
+    }

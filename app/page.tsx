@@ -164,7 +164,7 @@ export default async function DashboardPage() {
         </div>
         
         <Link
-          href={`/lessons/${q.id}`}
+          href={`/${q.id}`}
           className="flex items-center gap-1 text-emerald-600 font-bold hover:text-emerald-700 transition-colors group/btn"
         >
           <span>عرض الجذاذة</span>
