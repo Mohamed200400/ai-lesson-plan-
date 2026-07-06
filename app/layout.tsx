@@ -5,6 +5,7 @@ import SideBarWrapper from "./side-bar-wrapper";
 import SessionWraper from "./session-provider-wrapper";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { Toaster } from 'sonner'
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {/* Main content (RTL: appears on the left of sidebar) */}
             <main className="flex-1 min-w-0">{children}</main>
             {/* Sidebar on the right in RTL */}
+            <Toaster richColors position="top-center" closeButton />
           </SessionWraper>
         </div>
       </body>

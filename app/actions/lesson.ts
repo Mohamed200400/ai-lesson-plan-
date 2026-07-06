@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/db"
 import { GoogleGenAI, Type } from "@google/genai"
+import { revalidatePath } from "next/cache"
 
 export async function* generateLesson(userId:string , formData: FormData){
     const title = formData.get("title") as string
@@ -182,3 +183,30 @@ export async function getLessonById(lessonId: string) {
 
       }
     }
+export async function deleteLesson(id : string){
+  try {
+    
+    const deletedLesson = await prisma.lessonPlan.delete({
+      where: { 
+        id,
+        
+      }
+    })
+
+    
+    revalidatePath("/") 
+
+   
+    return { success: true, data: deletedLesson }
+
+  } catch (error) {
+    
+    console.error("❌ Failed to delete lesson:", error)
+
+   
+    return { 
+      success: false, 
+      error: "تعذر حذف الجذاذة. قد تكون محذوفة مسبقاً أو هناك مشكلة في الاتصال." 
+    }
+  }
+}
