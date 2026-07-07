@@ -160,7 +160,7 @@ export default async function DashboardPage() {
       <div className="mt-6 pt-4 border-t border-gray-50 flex items-center justify-between text-xs text-gray-400">
         <div className="flex items-center gap-1.5">
           <Calendar className="w-3.5 h-3.5 text-gray-400" />
-          <span>المقاربة بالكفايات</span>
+          <span>{q.pedagogicalApproach}</span>
         </div>
         
         <Link

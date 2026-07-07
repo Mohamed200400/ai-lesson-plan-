@@ -2,13 +2,13 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutGrid, Sparkles, Archive, Users, BookOpen, Settings } from "lucide-react";
+import { LayoutGrid, Sparkles, Archive, Users, BookOpen, Settings, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const nav = [
   { href: "/", label: "Dashboard", icon: LayoutGrid },
   { href: "/new-generation", label: "New Generation", icon: Sparkles },
-  { href: "/archive", label: "My Archive", icon: Archive },
+  { href: "/profile", label: "My Profile", icon: User },
   { href: "/community", label: "Community Hub", icon: Users },
   { href: "/resources", label: "Resources", icon: BookOpen },
 ];
@@ -16,7 +16,7 @@ const nav = [
 export function Sidebar() {
   const pathname = usePathname();
   return (
-    <aside className="hidden md:flex w-[240px] shrink-0 flex-col justify-between border-l border-outline-variant/60 bg-paper px-5 py-6">
+    <aside className="hidden md:flex w-[240px] shrink-0 flex-col justify-between border-l border-outline-variant/60 bg-paper px-5 py-6 ">
       <div>
         <div className="mb-10 flex items-center justify-between">
           <div className="h-9 w-9 rounded-md bg-primary" aria-hidden />
@@ -49,16 +49,7 @@ export function Sidebar() {
         </nav>
       </div>
 
-      <div className="flex items-center justify-between rounded-md px-2 py-2">
-        <Settings className="h-4 w-4 text-on-surface-variant" />
-        <div className="flex items-center gap-2">
-          <div className="text-right">
-            <div className="text-label-md font-semibold">أحمد محمود</div>
-            <div className="text-caption text-on-surface-variant">Teacher Profile</div>
-          </div>
-          <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary-container to-primary" />
-        </div>
-      </div>
+     
     </aside>
   );
 }
