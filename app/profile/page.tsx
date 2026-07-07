@@ -197,77 +197,9 @@ export default function ProfilePage() {
               </div>
             )}
 
-            {activeTab === "security" && (
-              <div className="space-y-6">
-                <h2 className="text-lg font-bold text-slate-900">تحديث كلمة المرور</h2>
-                <div className="grid gap-4 md:grid-cols-2">
-                  <PasswordField
-                    label="كلمة المرور الحالية"
-                    value={passwords.current}
-                    onChange={(v) => setPasswords({ ...passwords, current: v })}
-                  />
-                  <PasswordField
-                    label="كلمة المرور الجديدة"
-                    value={passwords.new}
-                    onChange={(v) => setPasswords({ ...passwords, new: v })}
-                  />
-                  <PasswordField
-                    label="تأكيد كلمة المرور"
-                    value={passwords.confirm}
-                    onChange={(v) => setPasswords({ ...passwords, confirm: v })}
-                  />
-                </div>
-                <button className="rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-emerald-700">
-                  تحديث كلمة المرور
-                </button>
+            
 
-                <div className="border-t border-slate-100 pt-6">
-                  <h3 className="mb-4 text-lg font-bold text-red-600">حذف الحساب</h3>
-                  <p className="mb-4 text-sm text-slate-500">
-                    سيؤدي حذف حسابك إلى إزالة جميع بياناتك بشكل دائم.
-                  </p>
-                  <button className="rounded-lg border border-red-200 px-5 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50">
-                    حذف الحساب
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {activeTab === "preferences" && (
-              <div className="space-y-6">
-                <h2 className="text-lg font-bold text-slate-900">التفضيلات</h2>
-                <div className="space-y-3">
-                  <ToggleRow
-                    label="الإشعارات"
-                    description="استلام إشعارات الدروس والتحديثات"
-                    icon={Bell}
-                    checked={preferences.notifications}
-                    onChange={(v) => setPreferences({ ...preferences, notifications: v })}
-                  />
-                  <ToggleRow
-                    label="الوضع المظلم"
-                    description="تفعيل المظهر الداكن"
-                    icon={Moon}
-                    checked={preferences.darkMode}
-                    onChange={(v) => setPreferences({ ...preferences, darkMode: v })}
-                  />
-                  <ToggleRow
-                    label="التقارير الأسبوعية"
-                    description="إرسال ملخص أسبوعي لأدائك"
-                    icon={Shield}
-                    checked={preferences.weeklyReport}
-                    onChange={(v) => setPreferences({ ...preferences, weeklyReport: v })}
-                  />
-                  <ToggleRow
-                    label="الملف الشخصي خاص"
-                    description="إخفاء معلوماتك عن الأعضاء الآخرين"
-                    icon={User}
-                    checked={preferences.privateProfile}
-                    onChange={(v) => setPreferences({ ...preferences, privateProfile: v })}
-                  />
-                </div>
-              </div>
-            )}
+           
           </div>
         </div>
       </div>
