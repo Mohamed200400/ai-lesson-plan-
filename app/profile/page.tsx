@@ -2,7 +2,7 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   User,
   Mail,
@@ -24,96 +24,91 @@ import {
   BookMarked,
   Clock,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { getUser, updateUser } from "../actions/user";
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<"info" | "security" | "preferences">("info");
   const [isEditing, setIsEditing] = useState(false);
+  const [data,setData] = useState<any>({
+    name : "",
+    email : "",
+    level : "",
+    phone : "",
+    country : ""
+  })
+  const {data : session } = useSession()
+  //@ts-ignore
+  const userId = session?.user?.id
+  
+  const handleEdit= async ()=>{
+    setIsEditing(!isEditing);
+    if (isEditing){
+      const res = await updateUser(userId,data)
+    console.log(res)
+    }
+    
 
-  const [info, setInfo] = useState({
-    fullName: "أحمد محمد",
-    email: "ahmed@example.com",
-    phone: "05xxxxxxxx",
-    location: "الرياض، المملكة العربية السعودية",
-    stage: "المرحلة الثانوية",
-    subject: "الرياضيات",
-  });
+  }
 
-  const [passwords, setPasswords] = useState({
-    current: "",
-    new: "",
-    confirm: "",
-  });
+  useEffect(()=>{
+    const userData = async  () => {
+      try{
+        const res = await getUser(userId)
+        setData({
+          name : res?.data?.name || "",
+          email : res?.data?.email || "",
+          level : res?.data?.defaultLevel || "",
+          phone : res?.data?.phone || "",
+          country : res?.data?.country || "",
+        })
+      }catch(e){
+        console.log(e)
+      }
+    }
+     userData()
 
-  const [preferences, setPreferences] = useState({
-    notifications: true,
-    darkMode: false,
-    weeklyReport: true,
-    privateProfile: false,
-  });
+  },[userId])
+  console.log(data)
 
-  const stats = [
-    { label: "الدروس", value: "24", icon: BookMarked },
-    { label: "الطلاب", value: "156", icon: Users },
-    { label: "سنوات الخبرة", value: "5", icon: Clock },
-    { label: "الإنجازات", value: "12", icon: Award },
-  ];
+  
+
+ 
+
+
 
   const tabs = [
     { id: "info", label: "المعلومات الشخصية" },
-    { id: "security", label: "الأمان" },
-    { id: "preferences", label: "التفضيلات" },
+    
   ] as const;
 
   return (
     <main className="min-h-screen bg-slate-50 p-4 md:p-8" dir="rtl">
-      <div className="mx-auto max-w-5xl space-y-6">
+      {data && <div className="mx-auto max-w-5xl space-y-6">
         {/* Header */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-500 p-8 text-white shadow-lg">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.15),transparent_40%)]" />
           <div className="relative flex flex-col items-center gap-4 md:flex-row md:gap-6">
             <div className="relative">
               <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white text-2xl font-bold text-emerald-600 shadow-md">
-                {info.fullName
-                  .split(" ")
-                  .map((n) => n[0])
-                  .slice(0, 2)
-                  .join(" ")}
+                {data.name}
+                  
               </div>
               <button className="absolute -bottom-1 -right-1 rounded-full bg-emerald-700 p-1.5 text-white hover:bg-emerald-800">
                 <Camera className="h-4 w-4" />
               </button>
             </div>
             <div className="text-center md:text-right">
-              <h1 className="text-2xl font-bold">{info.fullName}</h1>
+              <h1 className="text-2xl font-bold">{data.name}</h1>
               <p className="mt-1 text-emerald-50">
-                {info.stage} • {info.subject}
+                {data.name}
               </p>
-              <button
-                onClick={() => setActiveTab("info")}
-                className="mt-3 inline-flex items-center gap-2 rounded-lg bg-white/20 px-4 py-2 text-sm font-medium backdrop-blur-sm hover:bg-white/30"
-              >
-                <Pencil className="h-4 w-4" />
-                تعديل الملف الشخصي
-              </button>
+             
             </div>
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-xl bg-white p-4 shadow-sm transition hover:shadow-md"
-            >
-              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
-                <stat.icon className="h-5 w-5" />
-              </div>
-              <p className="text-2xl font-bold text-slate-900">{stat.value}</p>
-              <p className="text-sm text-slate-500">{stat.label}</p>
-            </div>
-          ))}
-        </div>
+       
 
         {/* Tabs */}
         <div className="rounded-2xl bg-white shadow-sm">
@@ -139,7 +134,7 @@ export default function ProfilePage() {
                 <div className="flex items-center justify-between">
                   <h2 className="text-lg font-bold text-slate-900">المعلومات الشخصية</h2>
                   <button
-                    onClick={() => setIsEditing(!isEditing)}
+                    onClick={() => handleEdit()}
                     className={`inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium ${
                       isEditing
                         ? "bg-emerald-50 text-emerald-600"
@@ -154,45 +149,39 @@ export default function ProfilePage() {
                   <Field
                     label="الاسم الكامل"
                     icon={User}
-                    value={info.fullName}
+                    value={data.name}
                     readOnly={!isEditing}
-                    onChange={(v) => setInfo({ ...info, fullName: v })}
+                    onChange={(v) => setData({ ...data, name : v })}
                   />
                   <Field
                     label="البريد الإلكتروني"
                     icon={Mail}
-                    value={info.email}
+                    value={data.email}
                     readOnly={!isEditing}
-                    onChange={(v) => setInfo({ ...info, email: v })}
+                    onChange={(v) => setData({ ...data, email: v })}
                   />
                   <Field
                     label="رقم الهاتف"
                     icon={Phone}
-                    value={info.phone}
+                    value={data.phone}
                     readOnly={!isEditing}
-                    onChange={(v) => setInfo({ ...info, phone: v })}
+                    onChange={(v) => setData({ ...data, phone: v })}
                   />
                   <Field
                     label="الموقع"
                     icon={MapPin}
-                    value={info.location}
+                    value={data.country}
                     readOnly={!isEditing}
-                    onChange={(v) => setInfo({ ...info, location: v })}
+                    onChange={(v) => setData({ ...data, country: v })}
                   />
                   <Field
                     label="المرحلة الدراسية"
                     icon={GraduationCap}
-                    value={info.stage}
+                    value={data.level}
                     readOnly={!isEditing}
-                    onChange={(v) => setInfo({ ...info, stage: v })}
+                    onChange={(v) => setData({ ...data, level: v })}
                   />
-                  <Field
-                    label="المادة"
-                    icon={BookOpen}
-                    value={info.subject}
-                    readOnly={!isEditing}
-                    onChange={(v) => setInfo({ ...info, subject: v })}
-                  />
+                 
                 </div>
               </div>
             )}
@@ -202,7 +191,7 @@ export default function ProfilePage() {
            
           </div>
         </div>
-      </div>
+      </div>}
     </main>
   );
 }
@@ -227,7 +216,7 @@ function Field({
         <Icon className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
         <input
           type="text"
-          value={value}
+          value={value || ""}
           readOnly={readOnly}
           onChange={(e) => onChange(e.target.value)}
           className={`w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pr-11 pl-4 text-sm text-slate-900 outline-none transition ${
@@ -241,75 +230,5 @@ function Field({
   );
 }
 
-function PasswordField({
-  label,
-  value,
-  onChange,
-}: {
-  label: string;
-  value: string;
-  onChange: (val: string) => void;
-}) {
-  const [show, setShow] = useState(false);
-  return (
-    <div>
-      <label className="mb-1.5 block text-sm font-medium text-slate-700">{label}</label>
-      <div className="relative">
-        <Lock className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
-        <input
-          type={show ? "text" : "password"}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pr-11 pl-12 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
-        />
-        <button
-          type="button"
-          onClick={() => setShow(!show)}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-        >
-          {show ? <EyeOff className="h-5 w-5 " /> : <Eye className="h-5 w-5 " />}
-        </button>
-      </div>
-    </div>
-  );
-}
 
-function ToggleRow({
-  label,
-  description,
-  icon: Icon,
-  checked,
-  onChange,
-}: {
-  label: string;
-  description: string;
-  icon: React.ElementType;
-  checked: boolean;
-  onChange: (val: boolean) => void;
-}) {
-  return (
-    <div className="flex items-center justify-between rounded-xl border border-slate-100 p-4">
-      <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
-          <Icon className="h-5 w-5" />
-        </div>
-        <div>
-          <p className="font-medium text-slate-900">{label}</p>
-          <p className="text-sm text-slate-500">{description}</p>
-        </div>
-      </div>
-      <button
-        onClick={() => onChange(!checked)}
-        className={`relative h-7 w-12 rounded-full transition ${
-          checked ? "bg-emerald-600" : "bg-slate-200"
-        }`}
-      >
-        <span
-          className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow-sm transition ${
-            checked ? "right-1" : "left-1"
-          }`}
-        />
-      </button>
-    </div>
-  );
-}
+

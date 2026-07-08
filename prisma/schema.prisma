@@ -41,6 +41,7 @@ model User {
   image        String?          
   country      String?
   defaultLevel String?
+  phone        String?
 
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
