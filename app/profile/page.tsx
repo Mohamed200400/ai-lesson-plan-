@@ -27,7 +27,7 @@ import {
   Clock,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { getUser, updateUser } from "../actions/user";
+import { getUser, updateUser, updateUserImage } from "../actions/user";
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<"info" | "security" | "preferences">("info");
@@ -67,7 +67,7 @@ export default function ProfilePage() {
          
         })
         if (res?.data?.image){
-        setImage(res?.data?.image )}
+        setImage(res?.data?.image)}
 
       }catch(e){
         console.log(e)
@@ -78,11 +78,25 @@ export default function ProfilePage() {
   },[userId])
 
 
-  const ImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const ImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (file){
         const localUrl = URL.createObjectURL(file)
         setImage(localUrl)
+        const data = new FormData()
+        data.append("file" , file)
+        data.append("upload_preset" ,"lessonPlan" )
+        data.append("cloud_name", "ncbsx1ix") 
+        const res = await fetch("https://api.cloudinary.com/v1_1/ncbsx1ix/image/upload",{
+          method: "POST",
+          body: data
+        })
+        const uploadImageUrl = await res.json()
+        
+        setImage(uploadImageUrl.url)
+        const updateRes = await updateUserImage(userId, uploadImageUrl.url);
+        
+
       }
   }
 

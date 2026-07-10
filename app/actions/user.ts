@@ -33,3 +33,19 @@ export async function updateUser(id : string , data : any){
           return { success: false, message: "unexpected error" };
     }
 }
+
+export async function updateUserImage(id : string , image: any){
+    try{
+        const res = await prisma.user.update({
+            where : { id : id },
+            data : {
+                image : image
+
+            }
+        })
+        return { res : res , success: true };
+    }catch(e){
+        console.log(e)
+          return { success: false, message: "unexpected error" };
+    }
+}
