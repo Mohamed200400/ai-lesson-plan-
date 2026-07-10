@@ -3,6 +3,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+
+import Image from 'next/image';
 import {
   User,
   Mail,
@@ -30,6 +32,7 @@ import { getUser, updateUser } from "../actions/user";
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<"info" | "security" | "preferences">("info");
   const [isEditing, setIsEditing] = useState(false);
+  const [image , setImage] = useState("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQulfoXg36hsnXW76RdY_TKMO6d26gEwlZ1YFzL-A5z3EDMBTJIWonxctx&s=10")
   const [data,setData] = useState<any>({
     name : "",
     email : "",
@@ -61,7 +64,10 @@ export default function ProfilePage() {
           level : res?.data?.defaultLevel || "",
           phone : res?.data?.phone || "",
           country : res?.data?.country || "",
+         
         })
+        if (res?.data?.image){
+        setImage(res?.data?.image || "")}
       }catch(e){
         console.log(e)
       }
@@ -71,7 +77,11 @@ export default function ProfilePage() {
   },[userId])
   console.log(data)
 
-  
+  const ImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      console.log(file)
+      setData(file?.name)
+  }
 
  
 
@@ -90,18 +100,30 @@ export default function ProfilePage() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.15),transparent_40%)]" />
           <div className="relative flex flex-col items-center gap-4 md:flex-row md:gap-6">
             <div className="relative">
-              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white text-2xl font-bold text-emerald-600 shadow-md">
-                {data.name}
+             
+                <Image src={image } alt="pic" 
+                    width={100} 
+                    height={100} 
+                    priority
+                  className="flex h-24 w-24 items-center justify-center rounded-full bg-cover" />
                   
-              </div>
+         
               <button className="absolute -bottom-1 -right-1 rounded-full bg-emerald-700 p-1.5 text-white hover:bg-emerald-800">
                 <Camera className="h-4 w-4" />
               </button>
+             <input
+          id="image-upload"
+          type="file"
+          name="profileImage"
+          accept="image/*" // 👈 Restricts file picker to images only
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          onChange={(e) => ImageUpload(e)}
+        />
             </div>
             <div className="text-center md:text-right">
               <h1 className="text-2xl font-bold">{data.name}</h1>
               <p className="mt-1 text-emerald-50">
-                {data.name}
+                {data.email}
               </p>
              
             </div>
