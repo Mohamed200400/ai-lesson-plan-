@@ -32,7 +32,7 @@ import { getUser, updateUser } from "../actions/user";
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<"info" | "security" | "preferences">("info");
   const [isEditing, setIsEditing] = useState(false);
-  const [image , setImage] = useState("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQulfoXg36hsnXW76RdY_TKMO6d26gEwlZ1YFzL-A5z3EDMBTJIWonxctx&s=10")
+  const [image , setImage] = useState("https://static.vecteezy.com/system/resources/thumbnails/048/334/475/small/a-person-icon-on-a-transparent-background-png.png")
   const [data,setData] = useState<any>({
     name : "",
     email : "",
@@ -67,7 +67,8 @@ export default function ProfilePage() {
          
         })
         if (res?.data?.image){
-        setImage(res?.data?.image || "")}
+        setImage(res?.data?.image )}
+
       }catch(e){
         console.log(e)
       }
@@ -75,12 +76,14 @@ export default function ProfilePage() {
      userData()
 
   },[userId])
-  console.log(data)
+
 
   const ImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
-      console.log(file)
-      setData(file?.name)
+      if (file){
+        const localUrl = URL.createObjectURL(file)
+        setImage(localUrl)
+      }
   }
 
  
@@ -105,7 +108,7 @@ export default function ProfilePage() {
                     width={100} 
                     height={100} 
                     priority
-                  className="flex h-24 w-24 items-center justify-center rounded-full bg-cover" />
+                  className="flex h-24 w-24 items-center justify-center bg-white rounded-full bg-cover" />
                   
          
               <button className="absolute -bottom-1 -right-1 rounded-full bg-emerald-700 p-1.5 text-white hover:bg-emerald-800">

@@ -505,6 +505,9 @@ video {
 .pointer-events-none {
   pointer-events: none;
 }
+.static {
+  position: static;
+}
 .absolute {
   position: absolute;
 }
@@ -1223,10 +1226,6 @@ video {
 }
 .stroke-\[3\] {
   stroke-width: 3;
-}
-.object-cover {
-  -o-object-fit: cover;
-     object-fit: cover;
 }
 .p-1 {
   padding: 0.25rem;
