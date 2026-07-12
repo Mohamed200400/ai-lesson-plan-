@@ -210,3 +210,18 @@ export async function deleteLesson(id : string){
     }
   }
 }
+
+export async function shareLesson(lessonId: string, updatedContent: any) {
+  try {
+    await prisma.lessonPlan.update({
+      where: { id: lessonId },
+      data: {
+        isPublic: updatedContent,
+      },
+    });
+    return { success: true, message: " تم تحديث حالة المشاركة بنجاح" };
+  } catch (error) {
+    console.error("فشل تحديث الجذاذة:", error);
+    return { success: false, message: "فشل تحديث حالة المشاركة" };
+  }
+}

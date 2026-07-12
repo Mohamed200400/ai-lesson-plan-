@@ -1,35 +1,9 @@
 {
   "node": {
-    "40ebb2bab51f4f05ebf38378e85cb6bcfa861f615b": {
-      "workers": {
-        "app/profile/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Cuser.ts%22%2C%5B%7B%22id%22%3A%2240ebb2bab51f4f05ebf38378e85cb6bcfa861f615b%22%2C%22exportedName%22%3A%22getUser%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Cuser.ts%22%7D%2C%7B%22id%22%3A%2260e2cc225eeeae4688e911552fb78304f83ac6fc4c%22%2C%22exportedName%22%3A%22updateUserImage%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Cuser.ts%22%7D%2C%7B%22id%22%3A%2260e923b6ffdd95f1cc80a0618cd78029ab5c1a06d2%22%2C%22exportedName%22%3A%22updateUser%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Cuser.ts%22%7D%5D%5D%5D&__client_imported__=true!",
-          "async": true
-        }
-      },
-      "layer": {
-        "app/profile/page": "action-browser"
-      },
-      "filename": "../C:\\ai lesson plan generator\\gedada-nextjs\\gedada-nextjs\\app\\actions\\user.ts",
-      "exportedName": "getUser"
-    },
-    "60e923b6ffdd95f1cc80a0618cd78029ab5c1a06d2": {
-      "workers": {
-        "app/profile/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Cuser.ts%22%2C%5B%7B%22id%22%3A%2240ebb2bab51f4f05ebf38378e85cb6bcfa861f615b%22%2C%22exportedName%22%3A%22getUser%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Cuser.ts%22%7D%2C%7B%22id%22%3A%2260e2cc225eeeae4688e911552fb78304f83ac6fc4c%22%2C%22exportedName%22%3A%22updateUserImage%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Cuser.ts%22%7D%2C%7B%22id%22%3A%2260e923b6ffdd95f1cc80a0618cd78029ab5c1a06d2%22%2C%22exportedName%22%3A%22updateUser%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Cuser.ts%22%7D%5D%5D%5D&__client_imported__=true!",
-          "async": true
-        }
-      },
-      "layer": {
-        "app/profile/page": "action-browser"
-      },
-      "filename": "../C:\\ai lesson plan generator\\gedada-nextjs\\gedada-nextjs\\app\\actions\\user.ts",
-      "exportedName": "updateUser"
-    },
     "402619253fdaabe86e61c415234939c1e2d7ec807a": {
       "workers": {
         "app/[id]/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%2C%5B%7B%22id%22%3A%22402619253fdaabe86e61c415234939c1e2d7ec807a%22%2C%22exportedName%22%3A%22deleteLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%2240f74c773076a990f06d9e45405436466691a34ea4%22%2C%22exportedName%22%3A%22getLessonById%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%22605ef6691e0af32c64a02e3f10c8802a698a6fe9e0%22%2C%22exportedName%22%3A%22generateLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%2260972e1d442bc62e146a51d1c7a0c449b58cf26fcc%22%2C%22exportedName%22%3A%22updateLessonContent%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%2C%5B%7B%22id%22%3A%22402619253fdaabe86e61c415234939c1e2d7ec807a%22%2C%22exportedName%22%3A%22deleteLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%2240f74c773076a990f06d9e45405436466691a34ea4%22%2C%22exportedName%22%3A%22getLessonById%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%226012e9cd68eff32271b850c1c24c733a08f1a43b50%22%2C%22exportedName%22%3A%22shareLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%22605ef6691e0af32c64a02e3f10c8802a698a6fe9e0%22%2C%22exportedName%22%3A%22generateLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%2260972e1d442bc62e146a51d1c7a0c449b58cf26fcc%22%2C%22exportedName%22%3A%22updateLessonContent%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%5D%5D%5D&__client_imported__=true!",
           "async": true
         }
       },
@@ -42,7 +16,7 @@
     "40f74c773076a990f06d9e45405436466691a34ea4": {
       "workers": {
         "app/[id]/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%2C%5B%7B%22id%22%3A%22402619253fdaabe86e61c415234939c1e2d7ec807a%22%2C%22exportedName%22%3A%22deleteLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%2240f74c773076a990f06d9e45405436466691a34ea4%22%2C%22exportedName%22%3A%22getLessonById%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%22605ef6691e0af32c64a02e3f10c8802a698a6fe9e0%22%2C%22exportedName%22%3A%22generateLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%2260972e1d442bc62e146a51d1c7a0c449b58cf26fcc%22%2C%22exportedName%22%3A%22updateLessonContent%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%2C%5B%7B%22id%22%3A%22402619253fdaabe86e61c415234939c1e2d7ec807a%22%2C%22exportedName%22%3A%22deleteLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%2240f74c773076a990f06d9e45405436466691a34ea4%22%2C%22exportedName%22%3A%22getLessonById%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%226012e9cd68eff32271b850c1c24c733a08f1a43b50%22%2C%22exportedName%22%3A%22shareLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%22605ef6691e0af32c64a02e3f10c8802a698a6fe9e0%22%2C%22exportedName%22%3A%22generateLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%2260972e1d442bc62e146a51d1c7a0c449b58cf26fcc%22%2C%22exportedName%22%3A%22updateLessonContent%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%5D%5D%5D&__client_imported__=true!",
           "async": true
         }
       },
@@ -52,10 +26,23 @@
       "filename": "../C:\\ai lesson plan generator\\gedada-nextjs\\gedada-nextjs\\app\\actions\\lesson.ts",
       "exportedName": "getLessonById"
     },
+    "6012e9cd68eff32271b850c1c24c733a08f1a43b50": {
+      "workers": {
+        "app/[id]/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%2C%5B%7B%22id%22%3A%22402619253fdaabe86e61c415234939c1e2d7ec807a%22%2C%22exportedName%22%3A%22deleteLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%2240f74c773076a990f06d9e45405436466691a34ea4%22%2C%22exportedName%22%3A%22getLessonById%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%226012e9cd68eff32271b850c1c24c733a08f1a43b50%22%2C%22exportedName%22%3A%22shareLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%22605ef6691e0af32c64a02e3f10c8802a698a6fe9e0%22%2C%22exportedName%22%3A%22generateLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%2260972e1d442bc62e146a51d1c7a0c449b58cf26fcc%22%2C%22exportedName%22%3A%22updateLessonContent%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": true
+        }
+      },
+      "layer": {
+        "app/[id]/page": "action-browser"
+      },
+      "filename": "../C:\\ai lesson plan generator\\gedada-nextjs\\gedada-nextjs\\app\\actions\\lesson.ts",
+      "exportedName": "shareLesson"
+    },
     "605ef6691e0af32c64a02e3f10c8802a698a6fe9e0": {
       "workers": {
         "app/[id]/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%2C%5B%7B%22id%22%3A%22402619253fdaabe86e61c415234939c1e2d7ec807a%22%2C%22exportedName%22%3A%22deleteLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%2240f74c773076a990f06d9e45405436466691a34ea4%22%2C%22exportedName%22%3A%22getLessonById%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%22605ef6691e0af32c64a02e3f10c8802a698a6fe9e0%22%2C%22exportedName%22%3A%22generateLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%2260972e1d442bc62e146a51d1c7a0c449b58cf26fcc%22%2C%22exportedName%22%3A%22updateLessonContent%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%2C%5B%7B%22id%22%3A%22402619253fdaabe86e61c415234939c1e2d7ec807a%22%2C%22exportedName%22%3A%22deleteLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%2240f74c773076a990f06d9e45405436466691a34ea4%22%2C%22exportedName%22%3A%22getLessonById%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%226012e9cd68eff32271b850c1c24c733a08f1a43b50%22%2C%22exportedName%22%3A%22shareLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%22605ef6691e0af32c64a02e3f10c8802a698a6fe9e0%22%2C%22exportedName%22%3A%22generateLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%2260972e1d442bc62e146a51d1c7a0c449b58cf26fcc%22%2C%22exportedName%22%3A%22updateLessonContent%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%5D%5D%5D&__client_imported__=true!",
           "async": true
         }
       },
@@ -68,7 +55,7 @@
     "60972e1d442bc62e146a51d1c7a0c449b58cf26fcc": {
       "workers": {
         "app/[id]/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%2C%5B%7B%22id%22%3A%22402619253fdaabe86e61c415234939c1e2d7ec807a%22%2C%22exportedName%22%3A%22deleteLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%2240f74c773076a990f06d9e45405436466691a34ea4%22%2C%22exportedName%22%3A%22getLessonById%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%22605ef6691e0af32c64a02e3f10c8802a698a6fe9e0%22%2C%22exportedName%22%3A%22generateLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%2260972e1d442bc62e146a51d1c7a0c449b58cf26fcc%22%2C%22exportedName%22%3A%22updateLessonContent%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%2C%5B%7B%22id%22%3A%22402619253fdaabe86e61c415234939c1e2d7ec807a%22%2C%22exportedName%22%3A%22deleteLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%2240f74c773076a990f06d9e45405436466691a34ea4%22%2C%22exportedName%22%3A%22getLessonById%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%226012e9cd68eff32271b850c1c24c733a08f1a43b50%22%2C%22exportedName%22%3A%22shareLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%22605ef6691e0af32c64a02e3f10c8802a698a6fe9e0%22%2C%22exportedName%22%3A%22generateLesson%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%2C%7B%22id%22%3A%2260972e1d442bc62e146a51d1c7a0c449b58cf26fcc%22%2C%22exportedName%22%3A%22updateLessonContent%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Clesson.ts%22%7D%5D%5D%5D&__client_imported__=true!",
           "async": true
         }
       },
@@ -77,19 +64,6 @@
       },
       "filename": "../C:\\ai lesson plan generator\\gedada-nextjs\\gedada-nextjs\\app\\actions\\lesson.ts",
       "exportedName": "updateLessonContent"
-    },
-    "60e2cc225eeeae4688e911552fb78304f83ac6fc4c": {
-      "workers": {
-        "app/profile/page": {
-          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Cuser.ts%22%2C%5B%7B%22id%22%3A%2240ebb2bab51f4f05ebf38378e85cb6bcfa861f615b%22%2C%22exportedName%22%3A%22getUser%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Cuser.ts%22%7D%2C%7B%22id%22%3A%2260e2cc225eeeae4688e911552fb78304f83ac6fc4c%22%2C%22exportedName%22%3A%22updateUserImage%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Cuser.ts%22%7D%2C%7B%22id%22%3A%2260e923b6ffdd95f1cc80a0618cd78029ab5c1a06d2%22%2C%22exportedName%22%3A%22updateUser%22%2C%22filename%22%3A%22..%2FC%3A%5C%5Cai%20lesson%20plan%20generator%5C%5Cgedada-nextjs%5C%5Cgedada-nextjs%5C%5Capp%5C%5Cactions%5C%5Cuser.ts%22%7D%5D%5D%5D&__client_imported__=true!",
-          "async": true
-        }
-      },
-      "layer": {
-        "app/profile/page": "action-browser"
-      },
-      "filename": "../C:\\ai lesson plan generator\\gedada-nextjs\\gedada-nextjs\\app\\actions\\user.ts",
-      "exportedName": "updateUserImage"
     }
   },
   "edge": {},

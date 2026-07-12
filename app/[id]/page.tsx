@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState, useTransition } from 'react'
-import { deleteLesson, getLessonById, updateLessonContent } from '../actions/lesson'
+import { deleteLesson, getLessonById, shareLesson, updateLessonContent } from '../actions/lesson'
 import { TopBar } from '@/components/layout/topbar';
 import { AlertTriangle, Check, CheckCircle2, Download, FileEdit, Lightbulb, Loader2, Printer, Save, Sparkles, Trash2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -27,6 +27,7 @@ export default function page() {
     const params = useParams()
     const id = params.id as string
     const [lessonData, setLessonData] = useState<any>(null);
+    const [isPublic,setIsPublic] = useState<boolean | undefined>()
     const [edit, setEdit] = useState(false);
     
     const [savingStatus,setSavingStatus] = useState("idle") 
@@ -41,6 +42,7 @@ export default function page() {
       try {
        
         const data =  await getLessonById(id)
+        setIsPublic(data?.isPublic)
         
         
           setLessonData(data?.content)
@@ -216,6 +218,7 @@ var data = lessonData
                         </>
                       
                     </button>}
+                    <Publish sharedStatus={isPublic} />
                    
                   </div>
                   
@@ -485,3 +488,62 @@ function Section({ title, children }: SectionProps) {
     </div>
   );
 }
+
+
+
+
+function Publish({ sharedStatus }:{ sharedStatus : boolean | undefined }) {
+  console.log(sharedStatus)
+  const [isShared, setIsShared] = useState(sharedStatus);
+  const router = useRouter()
+    const params = useParams()
+    const id = params.id as string
+
+  const handlePublish = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+    const nextSharedState = !isShared;
+    setIsShared(nextSharedState)
+    
+    try{
+        const res = await shareLesson(id ,nextSharedState)
+    console.log(res)
+    }catch(e){
+
+    }
+    
+  };
+
+  return (
+    <div className="flex flex-col items-center gap-4 p-4   max-w-sm mx-auto bg-slate-50" dir="rtl">
+      
+      {/* Toggle Switch Container */}
+      <div className="flex items-center justify-between w-full px-2">
+        <span className="text-sm font-medium  text-slate-700">
+          {isShared ?' إلغاء النشر': ' نشر'  }
+        </span>
+        
+        <button
+          type="button"
+          onClick={(e) => handlePublish(e)}
+          className={`
+            relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent 
+            transition-colors duration-200 ease-in-out focus:outline-none
+            ${isShared ? 'bg-emerald-600' : 'bg-slate-200'}
+          `}
+        >
+          {/* Toggle Knob */}
+          <span
+            className={`
+              pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 
+              transition duration-200 ease-in-out
+              ${isShared ? '-translate-x-5' : 'translate-x-0'}
+            `}
+          />
+        </button>
+      </div>
+
+    
+    </div>
+  );
+}
+
