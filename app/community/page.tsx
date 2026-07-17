@@ -1,8 +1,12 @@
+"use client"
+
 import { TopBar } from "@/components/layout/topbar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/input";
 import { Heart, Download, Copy, FileText, Sparkles, ChevronDown, SlidersHorizontal } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getPublicLesson } from "../actions/lesson";
 
 type Post = {
   author: string;
@@ -15,6 +19,31 @@ type Post = {
   downloads: number;
   ai?: boolean;
 };
+
+type Lesson = {
+
+ success: boolean;
+ message: string;
+ data: {
+ id: string;
+ createdAt: Date;
+ updatedAt: Date;
+ title: string;
+ subject: string;
+ level: string;
+ duration: number;
+ pedagogicalApproach: string;
+ content: any;
+ isPublic: boolean;
+ downloadsCount: number;
+ userId: string;
+ }[];
+} | {
+ success: boolean;
+ message: string;
+ data: undefined;
+}
+
 
 const posts: Post[] = [
   {
@@ -51,6 +80,29 @@ const posts: Post[] = [
 ];
 
 export default function CommunityPage() {
+
+
+  const [lessons, setLessons] = useState<Lesson>();
+  const [loading, setLoading] = useState(true);
+
+
+  useEffect(()=>{
+    async function fetchLessons() {
+      try{
+        
+          const data = await getPublicLesson()
+          setLessons(data);
+          console.log(data)
+      } catch (e) {
+        console.error("Failed to fetch lessons", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchLessons();
+  }, []);
+          
+    
   return (
     <div className="min-h-screen">
       <TopBar placeholder="ابحث في مجتمع المعلمين..." />

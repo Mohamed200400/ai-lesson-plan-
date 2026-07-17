@@ -225,3 +225,17 @@ export async function shareLesson(lessonId: string, updatedContent: any) {
     return { success: false, message: "فشل تحديث حالة المشاركة" };
   }
 }
+
+
+export async function getPublicLesson() {
+  try {
+    const res = await prisma.lessonPlan.findMany(
+      {where: { isPublic : true }}
+     
+    );
+    return { success: true, message: " تم تحديث حالة المشاركة بنجاح" , data: res};
+  } catch (error) {
+    console.error("فشل تحديث الجذاذة:", error);
+    return { success: false, message: "فشل تحديث حالة المشاركة" ,data : undefined };
+  }
+}
