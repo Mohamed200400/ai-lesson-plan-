@@ -8,6 +8,7 @@ import { Heart, Download, Copy, FileText, Sparkles, ChevronDown, SlidersHorizont
 import { useEffect, useState } from "react";
 import { getPublicLesson } from "../actions/lesson";
 
+
 type Post = {
   author: string;
   meta: string;
@@ -21,23 +22,34 @@ type Post = {
 };
 
 type Lesson = {
-
  success: boolean;
  message: string;
- data: {
+ data: ({
+ likes: {
  id: string;
  createdAt: Date;
- updatedAt: Date;
+ userId: string;
+ lessonPlanId: string;
+ }[];
+ } &{
+  user : {
+    name: string;
+    image: string | null;
+  }
+ }& {
  title: string;
  subject: string;
  level: string;
  duration: number;
+ id: string;
+ createdAt: Date;
+ updatedAt: Date;
  pedagogicalApproach: string;
- content: any;
+ content: any ;
  isPublic: boolean;
  downloadsCount: number;
  userId: string;
- }[];
+ })[];
 } | {
  success: boolean;
  message: string;
@@ -56,31 +68,13 @@ const posts: Post[] = [
     likes: 124,
     downloads: 89,
     ai: true,
-  },
-  {
-    author: "سارة خالد",
-    meta: "لغة عربية • أكاديمية التميز",
-    when: "منذ أسبوع",
-    title: 'تحليل قصيدة "المساء" لخليل مطران',
-    desc: "دليل شامل لتحليل الصور الشعرية والعواطف في قصيدة المساء يتضمن أسئلة نقاش عميقة وأنشطة استنتاجية لتعزيز...",
-    tags: ["اللغة العربية", "الثانوية العامة", "أدب"],
-    likes: 87,
-    downloads: 56,
-  },
-  {
-    author: "عمر حسن",
-    meta: "رياضيات • مدرسة المستقبل",
-    when: "منذ 3 أسابيع",
-    title: "تطبيقات الجبر في الحياة اليومية",
-    desc: "وحدة تعليمية كاملة تربط المفاهيم الجبرية المجردة بمواقف حياتية واقعية، مثل إدارة الميزانية الشخصية وحساب التخفيضات...",
-    tags: ["الرياضيات", "المرحلة المتوسطة"],
-    likes: 215,
-    downloads: 180,
-  },
+  }
 ];
 
 export default function CommunityPage() {
 
+  
+  
 
   const [lessons, setLessons] = useState<Lesson>();
   const [loading, setLoading] = useState(true);
@@ -126,44 +120,48 @@ export default function CommunityPage() {
         </Card>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-          {posts.map((p) => (
+          {lessons?.data?.map((p) => (
             <Card key={p.title} className="flex flex-col p-5">
-              {p.ai && (
+              {
                 <div className="self-start mb-3">
                   <span className="inline-flex items-center gap-1 rounded-full bg-ai-tint px-2.5 py-0.5 text-caption text-success">
                     <Sparkles className="h-3 w-3" /> مدعوم بالذكاء الاصطناعي
                   </span>
                 </div>
-              )}
+              }
               {/* Author */}
               <div className="flex items-start justify-between gap-3">
-                <span className="text-caption text-on-surface-variant whitespace-nowrap">{p.when}</span>
+                <span className="text-caption text-on-surface-variant whitespace-nowrap">{p.createdAt.toLocaleDateString()}</span>
                 <div className="flex items-center gap-3 min-w-0 text-right">
                   <div className="min-w-0">
-                    <div className="text-label-md font-semibold text-on-surface truncate">{p.author}</div>
-                    <div className="text-caption text-on-surface-variant truncate">{p.meta}</div>
+                    <div className="text-label-md font-semibold text-on-surface truncate">{p.user.name}</div>
+                    <div className="text-caption text-on-surface-variant truncate">{}</div>
                   </div>
-                  <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary-container to-primary shrink-0" />
+                  <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary-container to-primary shrink-0" >
+                    <img src={p.user?.image ||"https://static.vecteezy.com/system/resources/thumbnails/048/334/475/small/a-person-icon-on-a-transparent-background-png.png"} alt={p.user?.name || "User avatar"}  className="h-10 w-10 rounded-full object-cover" />
+                  </div>
                 </div>
               </div>
 
               <h3 className="mt-4 text-title-lg font-bold text-on-surface text-right leading-7">{p.title}</h3>
-              <p className="mt-2 text-body-md text-on-surface-variant text-right leading-7 line-clamp-4">{p.desc}</p>
+              <p className="mt-2 text-body-md text-on-surface-variant text-right leading-7 line-clamp-4">{p.content.competencies}</p>
 
               <div className="mt-4 flex flex-wrap justify-end gap-2">
-                {p.tags.map((t) => (
-                  <Badge key={t}>{t}</Badge>
-                ))}
+              
+                  <Badge >{p.level}</Badge>
+                  <Badge >{p.subject}</Badge>
+                  <Badge >{p.pedagogicalApproach}</Badge>
+          
               </div>
 
               <div className="mt-4 flex items-center justify-end gap-4 text-caption text-on-surface-variant">
-                <span className="inline-flex items-center gap-1">{p.downloads} <Download className="h-3.5 w-3.5" /></span>
-                <span className="inline-flex items-center gap-1">{p.likes} <Heart className="h-3.5 w-3.5 text-danger fill-danger" /></span>
+                <span className="inline-flex items-center gap-1">{p.downloadsCount} <Download className="h-3.5 w-3.5" /></span>
+                <span className="inline-flex items-center gap-1">{p?.likes?.length } <Heart className="h-3.5 w-3.5 text-danger fill-danger" /></span>
               </div>
 
               <div className="mt-4 space-y-2">
-                <Button className="w-full"><Copy className="h-4 w-4" /> استخدام كقالب</Button>
-                <Button variant="outline" className="w-full"><FileText className="h-4 w-4" /> توليد ورقة عمل</Button>
+                
+                <Button variant="outline" className="w-full"><FileText className="h-4 w-4" /> تصفح  </Button>
               </div>
             </Card>
           ))}

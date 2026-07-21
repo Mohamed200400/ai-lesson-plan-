@@ -230,7 +230,17 @@ export async function shareLesson(lessonId: string, updatedContent: any) {
 export async function getPublicLesson() {
   try {
     const res = await prisma.lessonPlan.findMany(
-      {where: { isPublic : true }}
+      {where:{ isPublic : true },
+        include: {
+          likes: true, // This populates the likes array
+          user: {
+          select: {
+            name: true,
+            image: true,
+          },
+        },
+         },
+        }
      
     );
     return { success: true, message: " تم تحديث حالة المشاركة بنجاح" , data: res};
