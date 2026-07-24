@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/input";
 import { Heart, Download, Copy, FileText, Sparkles, ChevronDown, SlidersHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getPublicLesson } from "../actions/lesson";
+import { toggleLike } from "../actions/like";
+import { useSession } from "next-auth/react";
 
 
 type Post = {
@@ -74,17 +76,21 @@ const posts: Post[] = [
 export default function CommunityPage() {
 
   
-  
+  const { data: session } = useSession();
 
   const [lessons, setLessons] = useState<Lesson>();
   const [loading, setLoading] = useState(true);
-
+  const [upd,setUpd] = useState(true)
+  //@ts-ignore
+  const id =  session?.user?.id;
+console.log(id) 
+  const [liked,setLiked] = useState()
 
   useEffect(()=>{
     async function fetchLessons() {
       try{
         
-          const data = await getPublicLesson()
+          const data : any = await getPublicLesson()
           setLessons(data);
           console.log(data)
       } catch (e) {
@@ -94,7 +100,22 @@ export default function CommunityPage() {
       }
     }
     fetchLessons();
-  }, []);
+  }, [upd]);
+
+
+
+  const updateLike = async (e:any,p:any)=>{
+    e.preventDefault();
+    setUpd(prev => !prev)
+    try{
+      const result = await toggleLike( p.id);
+      console.log(result)
+      
+      console.log(id)
+    }catch(e){
+      console.log(e)
+    }
+  }
           
     
   return (
@@ -156,7 +177,9 @@ export default function CommunityPage() {
 
               <div className="mt-4 flex items-center justify-end gap-4 text-caption text-on-surface-variant">
                 <span className="inline-flex items-center gap-1">{p.downloadsCount} <Download className="h-3.5 w-3.5" /></span>
-                <span className="inline-flex items-center gap-1">{p?.likes?.length } <Heart className="h-3.5 w-3.5 text-danger fill-danger" /></span>
+                <span
+                onClick={(e)=> updateLike(e,p)}
+                 className="inline-flex items-center gap-1">{p?.likes?.length } <Heart className={`h-3.5 w-3.5 ${p.likes.find(user => user.userId === id)?"text-danger fill-danger" : "" } `} /></span>
               </div>
 
               <div className="mt-4 space-y-2">

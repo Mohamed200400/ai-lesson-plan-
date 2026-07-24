@@ -87,18 +87,6 @@ model LessonPlan {
   comments            Comment[]          
 }
 
-model SavedLesson {
-  id           String     @id @default(cuid())
-  savedAt      DateTime   @default(now())
-
-  userId       String
-  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  lessonPlanId String
-  lessonPlan   LessonPlan @relation(fields: [lessonPlanId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, lessonPlanId]) 
-}
 
 model Like {
   id           String     @id @default(cuid())
@@ -112,6 +100,20 @@ model Like {
 
   @@unique([userId, lessonPlanId])
 }
+
+model SavedLesson {
+  id           String     @id @default(cuid())
+  savedAt      DateTime   @default(now())
+
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  lessonPlanId String
+  lessonPlan   LessonPlan @relation(fields: [lessonPlanId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonPlanId]) 
+}
+
 
 model Comment {
   id           String     @id @default(cuid())
