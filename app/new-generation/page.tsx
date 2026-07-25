@@ -5,8 +5,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input, Label } from "@/components/ui/input";
 import { FileEdit, Sparkles, Lightbulb, Printer, Download, ChevronDown, Check, X, Save, Loader2 } from "lucide-react";
-import { useActionState, useState } from "react";
-import { generateLesson, updateLessonContent } from "../actions/lesson";
+import { useActionState, useRef, useState } from "react";
+import { generateLesson, incrementDownloads, updateLessonContent } from "../actions/lesson";
 import { useSession } from "next-auth/react";
 const partialParse = require('partial-json-parser');
 
@@ -26,6 +26,9 @@ interface SectionProps {
 }
 
 export default function NewGenerationPage() {
+
+
+
   const { data: session } = useSession();
   //@ts-ignore
   const userId = session?.user?.id
@@ -156,6 +159,39 @@ export default function NewGenerationPage() {
 
   let data = lessonData;
 
+  
+const contentRef = useRef<HTMLDivElement>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const handleDownload = async () => {
+    if (!contentRef.current) return;
+    setIsGenerating(true);
+
+    try {
+      // Import the client-side browser package
+      
+      const html2pdf = (await import('html2pdf.js')).default;
+
+      const options = {
+        margin: [10, 10, 10, 10],
+        filename: "download.pdf" ,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' as const },
+      };
+//@ts-ignore
+      await html2pdf().set(options).from(contentRef.current).save();
+      
+    
+     //await incrementDownloads(lessonData.id)   there is a problem with the id
+    } catch (error) {
+      console.error('Download failed:', error);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+
   return (
     <div className="min-h-screen">
       <TopBar placeholder="البحث..." />
@@ -177,7 +213,10 @@ export default function NewGenerationPage() {
                     <button className="p-2 hover:bg-gray-200 rounded-md transition" aria-label="طباعة">
                       <Printer className="w-5 h-5" />
                     </button>
-                    <button className="p-2 hover:bg-gray-200 rounded-md transition" aria-label="تحميل">
+                    <button
+                    onClick={ ()=> handleDownload()}
+                    disabled={isGenerating}
+                    className="p-2 hover:bg-gray-200 rounded-md transition" aria-label="تحميل">
                       <Download className="w-5 h-5" />
                     </button>
                     
@@ -245,7 +284,7 @@ export default function NewGenerationPage() {
                 <div className="relative">
                   <div className={`absolute top-0 bottom-0 right-0 w-1 transition-colors ${edit ? "bg-amber-500" : "bg-emerald-500"}`} />
 
-                  <div className="max-w-5xl mx-auto px-8 py-10">
+                  <div  ref={contentRef} className="max-w-5xl mx-auto px-8 py-10">
                     {/* الهوية الأساسية للدرس */}
                     <div className={`${edit ? "bg-amber-50/40 border-amber-100" : "bg-emerald-50/40 border-emerald-100"} p-6 rounded-2xl border mb-6 transition-colors`}>
                       {edit ? (

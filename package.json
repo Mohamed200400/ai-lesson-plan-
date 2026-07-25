@@ -16,6 +16,7 @@
     "bcrypt": "^6.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "html2pdf.js": "^0.14.0",
     "lucide-react": "^0.460.0",
     "next": "^15.0.3",
     "next-auth": "^4.24.14",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/html2pdf.js": "^0.10.0",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",

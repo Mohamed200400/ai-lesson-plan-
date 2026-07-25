@@ -249,3 +249,27 @@ export async function getPublicLesson() {
     return { success: false, message: "فشل تحديث حالة المشاركة" ,data : undefined };
   }
 }
+
+export async function incrementDownloads(lessonId: string) {
+  if (!lessonId) {
+    return { success: false, error: "Invalid lesson ID" };
+  }
+
+  try {
+    const updatedLesson = await prisma.lessonPlan.update({
+      where: { id: lessonId },
+      data: {
+        downloadsCount: {
+          increment: 1, 
+        },
+      },
+    });
+
+  
+
+    return { success: true, count: updatedLesson.downloadsCount };
+  } catch (error) {
+    console.error("Failed to increment downloads count:", error);
+    return { success: false, error: "Database update failed" };
+  }
+}

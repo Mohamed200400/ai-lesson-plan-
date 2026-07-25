@@ -10,7 +10,7 @@ const nav = [
   { href: "/new-generation", label: "New Generation", icon: Sparkles },
   { href: "/profile", label: "My Profile", icon: User },
   { href: "/community", label: "Community Hub", icon: Users },
-  { href: "/resources", label: "Resources", icon: BookOpen },
+ 
 ];
 
 export function Sidebar() {

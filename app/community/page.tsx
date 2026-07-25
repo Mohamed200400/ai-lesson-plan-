@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { getPublicLesson } from "../actions/lesson";
 import { toggleLike } from "../actions/like";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 
 type Post = {
@@ -59,22 +60,24 @@ type Lesson = {
 }
 
 
-const posts: Post[] = [
-  {
-    author: "أحمد محمود",
-    meta: "مدرس علوم • مدرسة النور",
-    when: "منذ يومين",
-    title: "مقدمة في الكيمياء العضوية: استكشاف الروابط",
-    desc: "خطة درس تفاعلية مصممة لطلاب الصف العاشر، تركز على فهم الروابط التساهمية في المركبات العضوية باستخدام النماذج ثلاثية...",
-    tags: ["العلوم", "الصف العاشر", "تفاعلي"],
-    likes: 124,
-    downloads: 89,
-    ai: true,
-  }
-];
 
 export default function CommunityPage() {
-
+   const subjects = [
+    "اللغة العربية",
+    "الرياضيات",
+    "الإيقاظ العلمي",
+    "اللغة الفرنسية",
+    "اللغة الإنكليزية",
+    "التاريخ",
+    "الجغرافيا",
+    "التربية الإسلامية",
+    "التربية المدنية",
+    "التربية التشكيلية",
+    "التربية الموسيقية",
+    "التربية البدنية",
+    "التربية التقنية"
+  ]
+   const levels = ["السنة الأولى", "السنة الثانية", "السنة الثالثة", "السنة الرابعة", "السنة الخامسة", "السنة السادسة"];
   
   const { data: session } = useSession();
 
@@ -133,7 +136,53 @@ console.log(id)
         {/* Filters */}
         <Card className="p-3 flex flex-wrap items-center gap-2 mb-8 justify-end">
           <FilterPill label="المادة (الكل)" />
+         
+  <select
+    defaultValue=""
+    className="
+      h-10 px-4 pl-10 rounded-md border border-outline-variant bg-paper 
+      text-label-md text-on-surface-variant 
+      hover:border-primary hover:text-primary 
+      focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary
+      appearance-none cursor-pointer transition-colors
+    "
+  >
+    <option value="" disabled hidden>
+      المادة
+    </option>
+    {subjects.map((subject, index) => (
+      <option key={index} value={subject} className="text-gray-900 bg-white">
+        {subject}
+      </option>
+    ))}
+  </select>
+
+  
+  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-on-surface-variant">
+    <ChevronDown className="h-4 w-4" />
+  </div>
+
           <FilterPill label="المرحلة (الكل)" />
+
+          <select
+    defaultValue=""
+    className="
+      h-10 px-4 pl-10 rounded-md border border-outline-variant bg-paper 
+      text-label-md text-on-surface-variant 
+      hover:border-primary hover:text-primary 
+      focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary
+      appearance-none cursor-pointer transition-colors
+    "
+  >
+    <option value="" disabled hidden>
+     المرحلة
+    </option>
+    {levels.map((lvl, index) => (
+      <option key={index} value={lvl} className="text-gray-900 bg-white">
+        {lvl}
+      </option>
+    ))}
+  </select>
           <FilterPill label="الأكثر شيوعاً" />
           <button className="grid h-10 w-10 place-items-center rounded-md hover:bg-surface-low ml-auto">
             <SlidersHorizontal className="h-4 w-4 text-on-surface-variant" />
@@ -183,8 +232,9 @@ console.log(id)
               </div>
 
               <div className="mt-4 space-y-2">
+                 <Link href={`/community/${p.id}`} ><Button variant="outline" className="w-full"><FileText className="h-4 w-4" />  تصفح </Button> </Link>
                 
-                <Button variant="outline" className="w-full"><FileText className="h-4 w-4" /> تصفح  </Button>
+              
               </div>
             </Card>
           ))}

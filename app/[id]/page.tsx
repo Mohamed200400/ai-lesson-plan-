@@ -1,6 +1,6 @@
 "use client"
-import React, { useEffect, useState, useTransition } from 'react'
-import { deleteLesson, getLessonById, shareLesson, updateLessonContent } from '../actions/lesson'
+import React, { useEffect, useRef, useState, useTransition } from 'react'
+import { deleteLesson, getLessonById, incrementDownloads, shareLesson, updateLessonContent } from '../actions/lesson'
 import { TopBar } from '@/components/layout/topbar';
 import { AlertTriangle, Check, CheckCircle2, Download, FileEdit, Lightbulb, Loader2, Printer, Save, Sparkles, Trash2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -23,6 +23,9 @@ interface SectionProps {
 }
 
 export default function page() {
+
+
+
   const router = useRouter()
     const params = useParams()
     const id = params.id as string
@@ -134,6 +137,38 @@ export default function page() {
     })
   }
       
+  
+
+  const contentRef = useRef<HTMLDivElement>(null);
+    const [isGenerating, setIsGenerating] = useState(false);
+  
+    const handleDownload = async () => {
+      if (!contentRef.current) return;
+      setIsGenerating(true);
+  
+      try {
+        // Import the client-side browser package
+        
+        const html2pdf = (await import('html2pdf.js')).default;
+  
+        const options = {
+          margin: [10, 10, 10, 10],
+          filename: "download.pdf" ,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' as const },
+        };
+  //@ts-ignore
+        await html2pdf().set(options).from(contentRef.current).save();
+        await incrementDownloads(id)
+      } catch (error) {
+        console.error('Download failed:', error);
+      } finally {
+        setIsGenerating(false);
+      }
+    };
+
+
 var data = lessonData
   return (
     <div className="min-h-screen">
@@ -156,7 +191,7 @@ var data = lessonData
                     <button className="p-2 hover:bg-gray-200 rounded-md transition" aria-label="طباعة">
                       <Printer className="w-5 h-5" />
                     </button>
-                    <button className="p-2 hover:bg-gray-200 rounded-md transition" aria-label="تحميل">
+                    <button onClick={()=> handleDownload()} disabled={isGenerating} className="p-2 hover:bg-gray-200 rounded-md transition" aria-label="تحميل">
                       <Download className="w-5 h-5" />
                     </button>
                     <button 
@@ -228,7 +263,7 @@ var data = lessonData
                 <div className="relative">
                   <div className={`absolute top-0 bottom-0 right-0 w-1 transition-colors ${edit ? "bg-amber-500" : "bg-emerald-500"}`} />
 
-                  <div className="max-w-5xl mx-auto px-8 py-10">
+                  <div  ref={contentRef} className="max-w-5xl mx-auto px-8 py-10">
                     {/* الهوية الأساسية للدرس */}
                     <div className={`${edit ? "bg-amber-50/40 border-amber-100" : "bg-emerald-50/40 border-emerald-100"} p-6 rounded-2xl border mb-6 transition-colors`}>
                       {edit ? (
