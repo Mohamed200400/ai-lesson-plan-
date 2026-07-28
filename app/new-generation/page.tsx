@@ -213,12 +213,12 @@ const contentRef = useRef<HTMLDivElement>(null);
                     <button className="p-2 hover:bg-gray-200 rounded-md transition" aria-label="طباعة">
                       <Printer className="w-5 h-5" />
                     </button>
-                    <button
+                   {/* <button
                     onClick={ ()=> handleDownload()}
                     disabled={isGenerating}
                     className="p-2 hover:bg-gray-200 rounded-md transition" aria-label="تحميل">
                       <Download className="w-5 h-5" />
-                    </button>
+                    </button>*/}
                     
                     {edit ? 
                      <button

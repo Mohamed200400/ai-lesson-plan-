@@ -84,9 +84,11 @@ export default function CommunityPage() {
   const [lessons, setLessons] = useState<Lesson>();
   const [loading, setLoading] = useState(true);
   const [upd,setUpd] = useState(true)
+  const [selectedSubject, setSelectedSubject] = useState('');
+  const [selectedLevel, setSelectedLevel] = useState('');
   //@ts-ignore
   const id =  session?.user?.id;
-console.log(id) 
+
   const [liked,setLiked] = useState()
 
   useEffect(()=>{
@@ -104,6 +106,15 @@ console.log(id)
     }
     fetchLessons();
   }, [upd]);
+
+      const allLessons = lessons?.data || [];
+
+
+      let filteredLesson = selectedSubject
+        ? allLessons.filter((lesson: any) => lesson.subject === selectedSubject)
+        : allLessons;
+      
+        filteredLesson = selectedLevel ? filteredLesson.filter((lesson: any) => lesson.level === selectedLevel) : filteredLesson;
 
 
 
@@ -135,10 +146,12 @@ console.log(id)
 
         {/* Filters */}
         <Card className="p-3 flex flex-wrap items-center gap-2 mb-8 justify-end">
-          <FilterPill label="المادة (الكل)" />
-         
+        
+         <SlidersHorizontal className="h-4 w-4 text-on-surface-variant" />
   <select
-    defaultValue=""
+  value={selectedSubject}
+  onChange={(e) => setSelectedSubject(e.target.value)}
+  
     className="
       h-10 px-4 pl-10 rounded-md border border-outline-variant bg-paper 
       text-label-md text-on-surface-variant 
@@ -147,9 +160,8 @@ console.log(id)
       appearance-none cursor-pointer transition-colors
     "
   >
-    <option value="" disabled hidden>
-      المادة
-    </option>
+        <option value="">جميع المواد </option>
+    
     {subjects.map((subject, index) => (
       <option key={index} value={subject} className="text-gray-900 bg-white">
         {subject}
@@ -162,10 +174,11 @@ console.log(id)
     <ChevronDown className="h-4 w-4" />
   </div>
 
-          <FilterPill label="المرحلة (الكل)" />
+        
 
           <select
-    defaultValue=""
+    value={selectedLevel}
+    onChange={(e)=> setSelectedLevel(e.target.value)}
     className="
       h-10 px-4 pl-10 rounded-md border border-outline-variant bg-paper 
       text-label-md text-on-surface-variant 
@@ -174,8 +187,8 @@ console.log(id)
       appearance-none cursor-pointer transition-colors
     "
   >
-    <option value="" disabled hidden>
-     المرحلة
+    <option value="" >
+    جميع المراحل
     </option>
     {levels.map((lvl, index) => (
       <option key={index} value={lvl} className="text-gray-900 bg-white">
@@ -183,14 +196,14 @@ console.log(id)
       </option>
     ))}
   </select>
-          <FilterPill label="الأكثر شيوعاً" />
+         
           <button className="grid h-10 w-10 place-items-center rounded-md hover:bg-surface-low ml-auto">
-            <SlidersHorizontal className="h-4 w-4 text-on-surface-variant" />
+            
           </button>
         </Card>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-          {lessons?.data?.map((p) => (
+          {filteredLesson?.map((p) => (
             <Card key={p.title} className="flex flex-col p-5">
               {
                 <div className="self-start mb-3">
