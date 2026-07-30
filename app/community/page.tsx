@@ -134,9 +134,9 @@ export default function CommunityPage() {
     
   return (
     <div className="min-h-screen">
-      <TopBar placeholder="ابحث في مجتمع المعلمين..." />
+    
 
-      <div className="px-6 lg:px-10 pb-12">
+      <div className="px-6 lg:px-10 py-12">
         <div className="text-center max-w-2xl mx-auto mb-8">
           <h1 className="text-headline-lg font-bold text-on-surface">مجتمع المعلمين</h1>
           <p className="mt-2 text-body-md text-on-surface-variant">

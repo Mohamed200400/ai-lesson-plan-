@@ -50,9 +50,9 @@ export default async function DashboardPage() {
             ];
   return (
     <div className="min-h-screen">
-      <TopBar />
+    
 
-      <div className="px-6 lg:px-10 pb-12 space-y-8">
+      <div className="px-6 lg:px-10 py-12 space-y-8">
         {/* Welcome + stats */}
         <Card className="p-6 lg:p-8">
           <div className="flex flex-col-reverse lg:flex-row lg:items-center lg:justify-between gap-6">

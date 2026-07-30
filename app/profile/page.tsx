@@ -47,7 +47,7 @@ export default function ProfilePage() {
   const handleEdit= async ()=>{
     setIsEditing(!isEditing);
     if (isEditing){
-      const res = await updateUser(userId,data)
+      const res = await updateUser(data)
     console.log(res)
     }
     
@@ -57,7 +57,7 @@ export default function ProfilePage() {
   useEffect(()=>{
     const userData = async  () => {
       try{
-        const res = await getUser(userId)
+        const res = await getUser()
         setData({
           name : res?.data?.name || "",
           email : res?.data?.email || "",
@@ -94,7 +94,7 @@ export default function ProfilePage() {
         const uploadImageUrl = await res.json()
         
         setImage(uploadImageUrl.url)
-        const updateRes = await updateUserImage(userId, uploadImageUrl.url);
+        const updateRes = await updateUserImage( uploadImageUrl.url);
         
 
       }

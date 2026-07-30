@@ -6,12 +6,12 @@ import { getServerSession } from "next-auth";
 
 export async function toggleLike( lessonPlanId: string) {
     const session = await getServerSession(authOptions);
-//@ts-ignore
-  if (!session?.user?.id) {
+
+  if (!session || !session.user) {
     throw new Error("You must be logged in to like a lesson.");
   }
-//@ts-ignore
-  const userId = session.user.id;
+
+const userId = (session.user as { id: string }).id;
 
   const existingLike = await prisma.like.findUnique({
     where: {

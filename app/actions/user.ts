@@ -1,9 +1,19 @@
 "use server"
+import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/db"
+import { getServerSession } from "next-auth";
 
  
 
-export async function getUser(id:string){
+export async function getUser(){
+
+    const session = await getServerSession(authOptions)
+      if (!session || !session.user) {
+    throw new Error("You must be logged in to like a lesson.");
+  }
+
+const id = (session.user as { id: string }).id;
+
     try{
         const data = await prisma.user.findUnique({
             where : { id : id }
@@ -14,7 +24,13 @@ export async function getUser(id:string){
     }
 }
 
-export async function updateUser(id : string , data : any){
+export async function updateUser( data : any){
+    const session = await getServerSession(authOptions)
+      if (!session || !session.user) {
+    throw new Error("You must be logged in to like a lesson.");
+  }
+
+const id = (session.user as { id: string }).id;
     try{
         const res = await prisma.user.update({
             where : { id : id },
@@ -34,7 +50,13 @@ export async function updateUser(id : string , data : any){
     }
 }
 
-export async function updateUserImage(id : string , image: any){
+export async function updateUserImage( image: string){
+    const session = await getServerSession(authOptions)
+      if (!session || !session.user) {
+    throw new Error("You must be logged in to like a lesson.");
+  }
+
+const id = (session.user as { id: string }).id;
     try{
         const res = await prisma.user.update({
             where : { id : id },

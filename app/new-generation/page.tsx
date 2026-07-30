@@ -194,8 +194,8 @@ const contentRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className="min-h-screen">
-      <TopBar placeholder="البحث..." />
-      <div className="px-6 lg:px-10 pb-12">
+      
+      <div className="px-6 lg:px-10 py-12">
         <h1 className="mb-6 text-right text-headline-md font-bold text-on-surface">إنشاء جذاذة جديدة</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 lg:gap-8" dir="ltr">

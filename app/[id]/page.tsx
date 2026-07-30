@@ -1,4 +1,5 @@
 "use client"
+import { useReactToPrint } from "react-to-print";
 import React, { useEffect, useRef, useState, useTransition } from 'react'
 import { deleteLesson, getLessonById, incrementDownloads, shareLesson, updateLessonContent } from '../actions/lesson'
 import { TopBar } from '@/components/layout/topbar';
@@ -167,7 +168,10 @@ export default function page() {
         setIsGenerating(false);
       }
     };
-
+    const handlePrint = useReactToPrint({
+  contentRef: contentRef,
+  documentTitle: "جذاذة-درس",
+});
 
 var data = lessonData
   return (
@@ -188,7 +192,9 @@ var data = lessonData
                 {/* شريط التحكم العلوي */}
                 <div className="flex items-center justify-between border-b border-gray-200 px-6 py-3 bg-gray-50">
                   <div className="flex items-center gap-3 text-gray-600">
-                    <button className="p-2 hover:bg-gray-200 rounded-md transition" aria-label="طباعة">
+                    <button
+                    onClick={()=>handlePrint()} 
+                    className="p-2 hover:bg-gray-200 rounded-md transition" aria-label="طباعة">
                       <Printer className="w-5 h-5" />
                     </button>
                     <button onClick={()=> handleDownload()} disabled={isGenerating} className="p-2 hover:bg-gray-200 rounded-md transition" aria-label="تحميل">

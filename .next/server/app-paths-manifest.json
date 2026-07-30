@@ -1,8 +1,7 @@
 {
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/page": "app/page.js",
-  "/new-generation/page": "app/new-generation/page.js",
   "/community/page": "app/community/page.js",
-  "/community/[id]/page": "app/community/[id]/page.js",
-  "/profile/page": "app/profile/page.js"
+  "/[id]/page": "app/[id]/page.js",
+  "/page": "app/page.js",
+  "/new-generation/page": "app/new-generation/page.js"
 }
