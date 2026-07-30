@@ -8,6 +8,8 @@ import { FileEdit, Sparkles, Lightbulb, Printer, Download, ChevronDown, Check, X
 import { useActionState, useRef, useState } from "react";
 import { generateLesson, incrementDownloads, updateLessonContent } from "../actions/lesson";
 import { useSession } from "next-auth/react";
+import { generateLessonSchema } from "@/lib/validations/lesson";
+import { toast } from "sonner";
 const partialParse = require('partial-json-parser');
 
 interface MetaState {
@@ -99,8 +101,31 @@ export default function NewGenerationPage() {
       setEdit(false);
       setMeta({ success: null, message: "", id: "" });
 
+      const rawData = Object.fromEntries(formData.entries());
+      const validation = generateLessonSchema.safeParse(rawData);
+
+      if (!validation.success) {
+      // Extract the first validation error message to display
+      const firstError = validation.error.issues[0]?.message || "يرجى التأكد من البيانات المدخلة.";
+
+        toast.error(firstError);
+
+      setMeta({
+        success: false,
+        message: firstError,
+        id: "",
+      });
+      console.log(firstError)
+
+      return {
+        success: false,
+        message: firstError,
+      };
+    }
+
       try {
-        const stream = await generateLesson(userId, formData);
+        
+        const stream = await generateLesson( userId,formData);
         let accumulatedText = ""
         
         for await (const chunk of stream) {
@@ -125,6 +150,7 @@ export default function NewGenerationPage() {
         return { success: true, message: "تمت صياغة وحفظ الجذاذة بنجاح!" };
 
       } catch (error) {
+        toast.error( "حدث خطأ غير متوقع في خط الاتصال بالخادم.");
         setMeta({
           success: false,
           message: "حدث خطأ غير متوقع في خط الاتصال بالخادم.",
@@ -150,6 +176,7 @@ export default function NewGenerationPage() {
           setEdit(prev => !prev)
         }, 3000);
       }, 3000);
+      toast.success("تم حفظ الجذاذة بنجاح");
       }
     }catch(e){
 
@@ -181,10 +208,13 @@ const contentRef = useRef<HTMLDivElement>(null);
       };
 //@ts-ignore
       await html2pdf().set(options).from(contentRef.current).save();
-      
+
+      toast.success("تحميل الجذاذة بنجاح");
+    
     
      //await incrementDownloads(lessonData.id)   there is a problem with the id
     } catch (error) {
+      toast.error("خطأ في تحميل الملف");
       console.error('Download failed:', error);
     } finally {
       setIsGenerating(false);
@@ -570,7 +600,7 @@ const contentRef = useRef<HTMLDivElement>(null);
                     name="title"
                     placeholder="اختر العنوان أو المفهوم البيداغوجي"
                     className="text-right"
-                    required
+                   
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
@@ -578,7 +608,7 @@ const contentRef = useRef<HTMLDivElement>(null);
                     <Label className="text-right block mb-1">المادة</Label>
                     <select 
                       name="subject"
-                      required
+                   
                       className="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pr-3 pl-10 text-sm text-gray-900 shadow-sm outline-none transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-green-200">
                       <option value="">اختر المادة...</option>
                       {subjects.map((e) => (
@@ -590,7 +620,7 @@ const contentRef = useRef<HTMLDivElement>(null);
                     <Label className="text-right block mb-1">المستوى</Label>
                     <select 
                       name="level"
-                      required
+                     
                       className="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pr-3 pl-10 text-sm text-gray-900 shadow-sm outline-none transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-green-200">
                       <option value="">اختر المستوى..</option>
                       {levels.map((e) => (
@@ -608,7 +638,7 @@ const contentRef = useRef<HTMLDivElement>(null);
                         name="time"
                         className="text-right pr-12" 
                         placeholder="60"
-                        required
+                       
                       />
                       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">دقيقة</span>
                     </div>
@@ -622,7 +652,7 @@ const contentRef = useRef<HTMLDivElement>(null);
                   <div className="rounded-md border-2 border-success/40 bg-paper">
                     <select
                       name="pedagogie"
-                      required
+                      
                       className="w-full appearance-none rounded-lg border border-gray-200 bg-white py-2.5 pr-3 pl-10 text-sm text-gray-900 shadow-sm outline-none transition-all hover:border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-green-200">
                       <option value="" className="bg-white text-gray-800 font-medium text-right">اختر البيداغوجيا.</option>
                       {pedagogies.map((e) => (
