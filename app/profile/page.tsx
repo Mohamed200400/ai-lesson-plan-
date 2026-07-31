@@ -41,12 +41,13 @@ export default function ProfilePage() {
     country : ""
   })
   const {data : session } = useSession()
-  //@ts-ignore
-  const userId = session?.user?.id
+  
+  const userId = (session?.user as { id?: string })?.id
   
   const handleEdit= async ()=>{
     setIsEditing(!isEditing);
     if (isEditing){
+   
       const res = await updateUser(data)
     console.log(res)
     }

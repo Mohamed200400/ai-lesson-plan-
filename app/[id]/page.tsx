@@ -46,16 +46,19 @@ export default function page() {
       try {
        
         const data =  await getLessonById(id)
-        setIsPublic(data?.isPublic)
-        
+        if (data){
+
+          setIsPublic(data?.isPublic)      
         
           setLessonData(data?.content)
-          //@ts-ignore
-          setLevel(data.level)
-          //@ts-ignore
-          setSubject(data.subject)
-          //@ts-ignore
-          setTitle(data.title)
+         
+          setLevel(data?.level)
+        
+          setSubject(data?.subject)
+        
+          setTitle(data?.title)
+        
+        }
         
       } catch (err) {
         

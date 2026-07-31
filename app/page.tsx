@@ -17,8 +17,8 @@ export default async function DashboardPage() {
 
         
         const session = await getServerSession(authOptions)
-        //@ts-ignore
-        const userId =session?.user.id
+        
+        const userId = (session?.user as { id: string }).id;
         
         const lessons = await prisma.lessonPlan.findMany({
           where : {  userId },

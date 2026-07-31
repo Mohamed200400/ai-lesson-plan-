@@ -86,8 +86,8 @@ export default function CommunityPage() {
   const [upd,setUpd] = useState(true)
   const [selectedSubject, setSelectedSubject] = useState('');
   const [selectedLevel, setSelectedLevel] = useState('');
-  //@ts-ignore
-  const id =  session?.user?.id;
+  
+  const id =  (session?.user as { id?: string })?.id
 
   const [liked,setLiked] = useState()
 
@@ -95,7 +95,7 @@ export default function CommunityPage() {
     async function fetchLessons() {
       try{
         
-          const data : any = await getPublicLesson()
+          const data  = await getPublicLesson()
           setLessons(data);
           console.log(data)
       } catch (e) {
@@ -111,10 +111,10 @@ export default function CommunityPage() {
 
 
       let filteredLesson = selectedSubject
-        ? allLessons.filter((lesson: any) => lesson.subject === selectedSubject)
+        ? allLessons.filter((lesson) => lesson.subject === selectedSubject)
         : allLessons;
       
-        filteredLesson = selectedLevel ? filteredLesson.filter((lesson: any) => lesson.level === selectedLevel) : filteredLesson;
+        filteredLesson = selectedLevel ? filteredLesson.filter((lesson) => lesson.level === selectedLevel) : filteredLesson;
 
 
 

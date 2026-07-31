@@ -73,25 +73,7 @@ export default function StaticLessonPage() {
     }
   }, [id]);
 
-  const handleDelete = () => {
-    startTransition(async () => {
-      try {
-        const res = await deleteLesson(id);
-        if (res.success) {
-          router.push("/");
-          toast.success("تم حذف الجذاذة بنجاح", {
-            icon: <CheckCircle2 className="w-5 h-5 text-emerald-500" />,
-            duration: 4000,
-          });
-        }
-      } catch (error) {
-        toast.error("حدث خطأ ما", {
-          icon: <AlertTriangle className="w-5 h-5 text-red-500" />,
-        });
-        console.error("Failed to delete:", error);
-      }
-    });
-  };
+ 
   
 
   const data = lesson?.content;

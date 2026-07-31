@@ -32,8 +32,8 @@ export default function NewGenerationPage() {
 
 
   const { data: session } = useSession();
-  //@ts-ignore
-  const userId = session?.user?.id
+
+  const userId = (session?.user as { id?: string })?.id
   
   const [meta, setMeta] = useState<MetaState>({
     success: null,
@@ -124,8 +124,16 @@ export default function NewGenerationPage() {
     }
 
       try {
+                if (!userId) {
+          // Handle unauthenticated state (e.g., return early, show toast, or redirect)
+          console.error("User is not authenticated");
+         return {
+            success: false,
+            message: "User is not authenticated",
+          };
+        }
         
-        const stream = await generateLesson( userId,formData);
+        const stream = await generateLesson( userId ,formData);
         let accumulatedText = ""
         
         for await (const chunk of stream) {
@@ -187,40 +195,6 @@ export default function NewGenerationPage() {
   let data = lessonData;
 
   
-const contentRef = useRef<HTMLDivElement>(null);
-  const [isGenerating, setIsGenerating] = useState(false);
-
-  const handleDownload = async () => {
-    if (!contentRef.current) return;
-    setIsGenerating(true);
-
-    try {
-      // Import the client-side browser package
-      
-      const html2pdf = (await import('html2pdf.js')).default;
-
-      const options = {
-        margin: [10, 10, 10, 10],
-        filename: "download.pdf" ,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' as const },
-      };
-//@ts-ignore
-      await html2pdf().set(options).from(contentRef.current).save();
-
-      toast.success("تحميل الجذاذة بنجاح");
-    
-    
-     //await incrementDownloads(lessonData.id)   there is a problem with the id
-    } catch (error) {
-      toast.error("خطأ في تحميل الملف");
-      console.error('Download failed:', error);
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
 
   return (
     <div className="min-h-screen">
@@ -314,7 +288,7 @@ const contentRef = useRef<HTMLDivElement>(null);
                 <div className="relative">
                   <div className={`absolute top-0 bottom-0 right-0 w-1 transition-colors ${edit ? "bg-amber-500" : "bg-emerald-500"}`} />
 
-                  <div  ref={contentRef} className="max-w-5xl mx-auto px-8 py-10">
+                  <div   className="max-w-5xl mx-auto px-8 py-10">
                     {/* الهوية الأساسية للدرس */}
                     <div className={`${edit ? "bg-amber-50/40 border-amber-100" : "bg-emerald-50/40 border-emerald-100"} p-6 rounded-2xl border mb-6 transition-colors`}>
                       {edit ? (
