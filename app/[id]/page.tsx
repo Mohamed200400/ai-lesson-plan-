@@ -8,6 +8,9 @@ import { Input } from '@/components/ui/input';
 import { useParams, useRouter } from 'next/navigation';
 import { Corben } from 'next/font/google';
 import { toast } from 'sonner';
+import type { LessonContent, LessonPhase } from '@/lib/lesson-content';
+import { LessonSection as Section } from '@/components/lesson/lesson-section';
+
 interface MetaState {
   success: boolean | null;
   message: string;
@@ -18,11 +21,6 @@ interface FormState {
   message: string;
 }
 
-interface SectionProps {
-  title: string;
-  children: React.ReactNode;
-}
-
 export default function page() {
 
 
@@ -30,7 +28,7 @@ export default function page() {
   const router = useRouter()
     const params = useParams()
     const id = params.id as string
-    const [lessonData, setLessonData] = useState<any>(null);
+    const [lessonData, setLessonData] = useState<LessonContent | null>(null);
     const [isPublic,setIsPublic] = useState<boolean | undefined>()
     const [edit, setEdit] = useState(false);
     
@@ -48,7 +46,8 @@ export default function page() {
         const data =  await getLessonById(id)
         if (data){
 
-          setIsPublic(data?.isPublic)      
+          setIsPublic(data?.isPublic)
+      
         
           setLessonData(data?.content)
          
@@ -76,23 +75,25 @@ export default function page() {
     
     
       // 🛠️ State Management Handlers for Inline Editing
-      const handleFieldChange = (field: string, value: string) => {
-        setLessonData((prev: any) => ({
+      const handleFieldChange = (field: keyof LessonContent, value: string) => {
+        setLessonData((prev) => prev && ({
           ...prev,
           [field]: value
         }));
       };
     
-      const handleArrayFieldChange = (field: string, index: number, value: string) => {
-        setLessonData((prev: any) => {
+      const handleArrayFieldChange = (field: "objectives" | "competencies" | "prerequisites" | "didacticMaterials", index: number, value: string) => {
+        setLessonData((prev) => {
+          if (!prev) return prev;
           const updatedArray = [...(prev[field] || [])];
           updatedArray[index] = value;
           return { ...prev, [field]: updatedArray };
         });
       };
     
-      const handleTableFieldChange = (index: number, key: string, value: string) => {
-        setLessonData((prev: any) => {
+      const handleTableFieldChange = (index: number, key: keyof LessonPhase, value: string) => {
+        setLessonData((prev) => {
+          if (!prev) return prev;
           const updatedProcess = [...(prev.lessonProcess || [])];
           updatedProcess[index] = { ...updatedProcess[index], [key]: value };
           return { ...prev, lessonProcess: updatedProcess };
@@ -100,6 +101,7 @@ export default function page() {
       };
       const handleSaveToLibrary = async ()=>{
           try{
+            if (!lessonData) return
             setSavingStatus("saving") 
             const res = await updateLessonContent(id,lessonData)
             
@@ -156,13 +158,12 @@ export default function page() {
         const html2pdf = (await import('html2pdf.js')).default;
   
         const options = {
-          margin: [10, 10, 10, 10],
+          margin: [10, 10, 10, 10] as [number, number, number, number],
           filename: "download.pdf" ,
-          image: { type: 'jpeg', quality: 0.98 },
+          image: { type: 'jpeg' as const, quality: 0.98 },
           html2canvas: { scale: 2, useCORS: true },
           jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' as const },
         };
-  //@ts-ignore
         await html2pdf().set(options).from(contentRef.current).save();
         await incrementDownloads(id)
       } catch (error) {
@@ -412,7 +413,7 @@ var data = lessonData
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
-                              {data.lessonProcess.map((phase: any, i: number) => (
+                              {data.lessonProcess.map((phase: LessonPhase, i: number) => (
                                 <tr key={i} className="align-top hover:bg-gray-50/50 transition-colors">
                                   <td className="border-l border-gray-200 px-3 py-3 text-center font-semibold text-gray-900 bg-gray-50/30">
                                     {edit ? (
@@ -521,20 +522,6 @@ var data = lessonData
     </div>
   );
 }
-
-function Section({ title, children }: SectionProps) {
-  return (
-    <div className="mb-6 bg-gray-50/50 p-4 rounded-xl border border-gray-100 text-right">
-      <h3 className="text-lg font-bold text-[#1e5a8e] mb-3 border-r-4 border-emerald-500 pr-2">
-        {title}
-      </h3>
-      {children}
-    </div>
-  );
-}
-
-
-
 
 function Publish({ sharedStatus }:{ sharedStatus : boolean | undefined }) {
   console.log(sharedStatus)

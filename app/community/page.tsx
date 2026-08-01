@@ -10,6 +10,7 @@ import { getPublicLesson } from "../actions/lesson";
 import { toggleLike } from "../actions/like";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import type { LessonContent } from "@/lib/lesson-content";
 
 
 type Post = {
@@ -24,40 +25,30 @@ type Post = {
   ai?: boolean;
 };
 
-type Lesson = {
- success: boolean;
- message: string;
- data: ({
- likes: {
- id: string;
- createdAt: Date;
- userId: string;
- lessonPlanId: string;
- }[];
- } &{
-  user : {
+type PublicLesson = {
+  id: string;
+  title: string;
+  subject: string;
+  level: string;
+  duration: number;
+  createdAt: Date;
+  pedagogicalApproach: string;
+  content: LessonContent;
+  downloadsCount: number;
+  user: {
     name: string;
     image: string | null;
-  }
- }& {
- title: string;
- subject: string;
- level: string;
- duration: number;
- id: string;
- createdAt: Date;
- updatedAt: Date;
- pedagogicalApproach: string;
- content: any ;
- isPublic: boolean;
- downloadsCount: number;
- userId: string;
- })[];
-} | {
- success: boolean;
- message: string;
- data: undefined;
-}
+  };
+  likes: {
+    id: string;
+    userId: string;
+    lessonPlanId: string;
+  }[];
+};
+
+type LessonResult =
+  | { success: boolean; message: string; data: PublicLesson[] }
+  | { success: boolean; message: string; data: undefined };
 
 
 
@@ -81,15 +72,13 @@ export default function CommunityPage() {
   
   const { data: session } = useSession();
 
-  const [lessons, setLessons] = useState<Lesson>();
+  const [lessons, setLessons] = useState<LessonResult>();
   const [loading, setLoading] = useState(true);
   const [upd,setUpd] = useState(true)
   const [selectedSubject, setSelectedSubject] = useState('');
   const [selectedLevel, setSelectedLevel] = useState('');
   
   const id =  (session?.user as { id?: string })?.id
-
-  const [liked,setLiked] = useState()
 
   useEffect(()=>{
     async function fetchLessons() {
@@ -118,7 +107,7 @@ export default function CommunityPage() {
 
 
 
-  const updateLike = async (e:any,p:any)=>{
+  const updateLike = async (e: React.MouseEvent<HTMLSpanElement>, p: PublicLesson)=>{
     e.preventDefault();
     setUpd(prev => !prev)
     try{

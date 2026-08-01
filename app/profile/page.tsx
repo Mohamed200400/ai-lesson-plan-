@@ -28,12 +28,13 @@ import {
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { getUser, updateUser, updateUserImage } from "../actions/user";
+import type { UpdateUserInput } from "@/lib/validations/user";
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<"info" | "security" | "preferences">("info");
   const [isEditing, setIsEditing] = useState(false);
   const [image , setImage] = useState("https://static.vecteezy.com/system/resources/thumbnails/048/334/475/small/a-person-icon-on-a-transparent-background-png.png")
-  const [data,setData] = useState<any>({
+  const [data,setData] = useState<UpdateUserInput>({
     name : "",
     email : "",
     level : "",

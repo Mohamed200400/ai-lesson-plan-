@@ -13,6 +13,18 @@ export async function toggleLike( lessonPlanId: string) {
 
 const userId = (session.user as { id: string }).id;
 
+  const publicLesson = await prisma.lessonPlan.findFirst({
+    where: {
+      id: lessonPlanId,
+      isPublic: true,
+    },
+    select: { id: true },
+  });
+
+  if (!publicLesson) {
+    throw new Error("This lesson is not public.");
+  }
+
   const existingLike = await prisma.like.findUnique({
     where: {
       userId_lessonPlanId: {

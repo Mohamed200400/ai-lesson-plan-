@@ -1,276 +1,315 @@
-"use server"
+"use server";
 
-import prisma from "@/lib/db"
-import { GoogleGenAI, Type } from "@google/genai"
-import { revalidatePath } from "next/cache"
+import { authOptions } from "@/lib/auth";
+import prisma from "@/lib/db";
+import { lessonContentSchema, type LessonContent } from "@/lib/lesson-content";
+import { generateLessonSchema } from "@/lib/validations/lesson";
+import { GoogleGenAI, Type } from "@google/genai";
+import { Prisma } from "@prisma/client";
+import { revalidatePath } from "next/cache";
+import { getServerSession } from "next-auth";
+import { z } from "zod";
 
-export async function* generateLesson(userId:string , formData: FormData){
+const lessonIdSchema = z.string().min(1, "Invalid lesson ID");
 
-    
+async function requireUserId() {
+  const session = await getServerSession(authOptions);
+  const userId = (session?.user as { id?: string } | undefined)?.id;
 
-    const title = formData.get("title") as string
-    const subject = formData.get("subject") as string
-    const level = formData.get("level") as string
-    console.log(typeof level)
-    const time = formData.get("time") 
-    const duration = Number(time)
-    const pedagogie = formData.get("pedagogie") as string
- 
-    if (!title || !subject || !level || !time || !pedagogie){
-       
-         throw new Error('الرجاء ملء جميع الخانات المطلوبة قبل التوليد.');
-    }
-    const jsonSchema = {
-    type: Type.OBJECT,
-    properties: {
-      competencies: {
-        type: Type.ARRAY,
-        items: { type: Type.STRING },
-        description: "الكفايات المستهدفة: الكفاية الختامية (المستعرضة) والكفايات المكونة وفق المنهاج التونسي"
+  if (!userId) {
+    throw new Error("You must be logged in.");
+  }
+
+  return userId;
+}
+
+const jsonSchema = {
+  type: Type.OBJECT,
+  properties: {
+    competencies: { type: Type.ARRAY, items: { type: Type.STRING } },
+    objectives: { type: Type.ARRAY, items: { type: Type.STRING } },
+    prerequisites: { type: Type.ARRAY, items: { type: Type.STRING } },
+    didacticMaterials: { type: Type.ARRAY, items: { type: Type.STRING } },
+    lessonProcess: {
+      type: Type.ARRAY,
+      items: {
+        type: Type.OBJECT,
+        properties: {
+          phaseName: { type: Type.STRING },
+          duration: { type: Type.INTEGER },
+          teacherActivity: { type: Type.STRING },
+          studentActivity: { type: Type.STRING },
+          phaseMaterials: { type: Type.STRING },
+          evaluationType: { type: Type.STRING },
+          expectedOutputs: { type: Type.STRING },
+        },
+        required: [
+          "phaseName",
+          "duration",
+          "teacherActivity",
+          "studentActivity",
+          "phaseMaterials",
+          "evaluationType",
+          "expectedOutputs",
+        ],
       },
-      objectives: {
-        type: Type.ARRAY,
-        items: { type: Type.STRING },
-        description: "الأهداف الإجرائية السلوكية المصاغة بدقة (قابلة للملاحظة والقياس)"
-      },
-      prerequisites: {
-        type: Type.ARRAY,
-        items: { type: Type.STRING },
-        description: "المكتسبات القبلية والامتدادات الضرورية التي يبنى عليها الدرس"
-      },
-      didacticMaterials: {
-        type: Type.ARRAY,
-        items: { type: Type.STRING },
-        description: "الوسائل والمعينات التعليمية والسيناريوهات البيداغوجية العامة"
-      },
-      lessonProcess: {
-        type: Type.ARRAY,
-        description: "سير الحصة مفصلاً ويجب أن يحتوي إلزامياً بالترتيب على: التمهيد، بناء التعلمات، التطبيق، التقويم، الدعم، الغلق",
-        items: {
-          type: Type.OBJECT,
-          properties: {
-            phaseName: { 
-              type: Type.STRING, 
-              description: "اسم المرحلة حصراً (مثال: التمهيد / بناء التعلمات / التطبيق / التقويم / الدعم / الغلق)" 
-            },
-            duration: { 
-              type: Type.INTEGER, 
-              description: "الزمن المخصص لهذه المرحلة بالدقائق" 
-            },
-            teacherActivity: { 
-              type: Type.STRING, 
-              description: "نشاط الأستاذ بالتفصيل: طرح وضعية المشكل، الأسئلة الهادية، التوجيه الديداكتيكي" 
-            },
-            studentActivity: { 
-              type: Type.STRING, 
-              description: "نشاط المتعلم: البحث، التمشي، العمل الفردي أو المجموعاتي، الإجابات والصياغات المتوقعة" 
-            },
-            phaseMaterials: { 
-              type: Type.STRING, 
-              description: "الوسائل والسندات المحددة المستخدمة في هذه المرحلة بالذات (وثائق، كتاب مدرسي، لوحة، حاسوب...)" 
-            },
-            evaluationType: { 
-              type: Type.STRING, 
-              description: "نوع التقويم المرافق للمرحلة (تقويم تشخيصي، تكويني، تعديلي، جزائي)" 
-            },
-            expectedOutputs: { 
-              type: Type.STRING, 
-              description: "المخرجات والإنتاجات المنتظرة من المتعلم في نهاية هذه المرحلة" 
-            }
-          },
-          required: ["phaseName", "duration", "teacherActivity", "studentActivity", "phaseMaterials", "evaluationType", "expectedOutputs"]
-        }
-      },
-      homework: {
-        type: Type.STRING,
-        description: "الواجب المنزلي أو الأنشطة الامتدادية الموكلة للمتعلم في البيت"
-      }
     },
-    required: ["competencies", "objectives", "prerequisites", "didacticMaterials", "lessonProcess", "homework"]
-  };
-    const prompt=`
+    homework: { type: Type.STRING },
+  },
+  required: [
+    "competencies",
+    "objectives",
+    "prerequisites",
+    "didacticMaterials",
+    "lessonProcess",
+    "homework",
+  ],
+};
+
+export async function* generateLesson(formData: FormData) {
+  // Security boundary: the client never sends userId. The server reads it from
+  // the signed session so users cannot create or overwrite data for another account.
+  const userId = await requireUserId();
+  const input = generateLessonSchema.parse(Object.fromEntries(formData.entries()));
+
+  const prompt = `
     أنت خبير بيداغوجي ومفتش تعليمي محترف. قم بإعداد جذاذة تربوية تفصيلية ومكتملة للدرس التالي:
-    - عنوان الدرس: ${title}
-    - المادة: ${subject}
-    - المستوى الدراسي: ${level}
-    - المدة الزمنية الإجمالية: ${time} دقيقة
-    - المقاربة البيداغوجية المعتمدة: ${pedagogie}
+    - عنوان الدرس: ${input.title}
+    - المادة: ${input.subject}
+    - المستوى الدراسي: ${input.level}
+    - المدة الزمنية الإجمالية: ${input.time} دقيقة
+    - المقاربة البيداغوجية المعتمدة: ${input.pedagogie}
 
     تأكد من أن الأنشطة تطبيقية وعصرية وتراعي المقاربة المذكورة، واجعل التقويم يقيس تحقيق الأهداف بشكل حقيقي.
   `;
-      const ai = new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY, 
-    });
-    const responseStream = await ai.models.generateContentStream({
-          model: 'gemini-2.5-flash',
-          contents: prompt,
-          config: {
-                // نحدد هنا أننا نريد النتيجة بصيغة JSON حصراً
-                responseMimeType: "application/json",
-                responseSchema: jsonSchema, 
-                temperature: 0.7, // نسبة الإبداع (0.7 مثالية للخطط التربوية)
-            }
-        });
 
-        let fullText = "";
+  const ai = new GoogleGenAI({
+    apiKey: process.env.GEMINI_API_KEY,
+  });
 
-  // 2. بث الأجزاء فوراً للمتصفح عبر yield
+  const responseStream = await ai.models.generateContentStream({
+    model: "gemini-2.5-flash",
+    contents: prompt,
+    config: {
+      responseMimeType: "application/json",
+      responseSchema: jsonSchema,
+      temperature: 0.7,
+    },
+  });
+
+  let fullText = "";
+
   for await (const chunk of responseStream) {
     if (chunk.text) {
       fullText += chunk.text;
-      yield chunk.text; // 
+      yield chunk.text;
     }
   }
-      
-     
-      try{
-        const content = JSON.parse(fullText)
 
-        const res = await prisma.lessonPlan.create({
-          data : {
-            title : title ,
-            subject : subject ,
-            level : level ,
-            duration : duration ,
-            pedagogicalApproach : pedagogie ,
-            content : content,
-            userId : userId
-          
-          }
-        })
-        const successMeta = {
-          success: true,
-          message: "تم توليد الجذاذة وحفظها في قاعدة البيانات بنجاح!",
-          id: res.id,
-        };
-    
-    yield `||METADATA||${JSON.stringify(successMeta)}`;
+  try {
+    const content = lessonContentSchema.parse(JSON.parse(fullText));
 
-      }catch(e){
-        console.log(e)
-        const errorMeta = {
+    const lesson = await prisma.lessonPlan.create({
+      data: {
+        title: input.title,
+        subject: input.subject,
+        level: input.level,
+        duration: input.time,
+        pedagogicalApproach: input.pedagogie,
+        content: content as Prisma.InputJsonValue,
+        userId,
+      },
+    });
+
+    yield `||METADATA||${JSON.stringify({
+      success: true,
+      message: "تم توليد الجذاذة وحفظها في قاعدة البيانات بنجاح!",
+      id: lesson.id,
+    })}`;
+  } catch (error) {
+    console.error("Failed to save generated lesson:", error);
+    yield `||METADATA||${JSON.stringify({
       success: false,
       message: "تم توليد النص ولكن فشل الحفظ في قاعدة البيانات.",
       id: null,
-    };
-
-    yield `||METADATA||${JSON.stringify(errorMeta)}`;
-
-      }
-    
+    })}`;
+  }
 }
 
-export async function updateLessonContent(lessonId: string, updatedContent: any) {
+export async function updateLessonContent(lessonId: string, updatedContent: LessonContent) {
   try {
-    await prisma.lessonPlan.update({
-      where: { id: lessonId },
-      data: {
-        content: updatedContent, // حفظ كائن الـ JSON المعدل بالكامل
-      },
+    const userId = await requireUserId();
+    const id = lessonIdSchema.parse(lessonId);
+    const content = lessonContentSchema.parse(updatedContent);
+
+    // Authorization rule: a lesson id from the URL is not proof of ownership.
+    // Every private write is scoped by both the lesson id and session user id.
+    const result = await prisma.lessonPlan.updateMany({
+      where: { id, userId },
+      data: { content: content as Prisma.InputJsonValue },
     });
+
+    if (result.count === 0) {
+      return { success: false, message: "Lesson not found or you do not have permission to edit it." };
+    }
+
     return { success: true, message: "تم حفظ التعديلات بنجاح!" };
   } catch (error) {
-    console.error("فشل تحديث الجذاذة:", error);
+    console.error("Failed to update lesson:", error);
     return { success: false, message: "فشل حفظ التعديلات في قاعدة البيانات." };
   }
 }
 
 export async function getLessonById(lessonId: string) {
   try {
-    const lesson = await prisma.lessonPlan.findUnique({
-      where: { id: lessonId },
-     
-     })
-    return lesson
-    }catch(e){
+    const userId = await requireUserId();
+    const id = lessonIdSchema.parse(lessonId);
 
-      }
-    }
-export async function deleteLesson(id : string){
-  try {
-    
-    const deletedLesson = await prisma.lessonPlan.delete({
-      where: { 
-        id,
-        
-      }
-    })
-
-    
-    revalidatePath("/") 
-
-   
-    return { success: true, data: deletedLesson }
-
-  } catch (error) {
-    
-    console.error("❌ Failed to delete lesson:", error)
-
-   
-    return { 
-      success: false, 
-      error: "تعذر حذف الجذاذة. قد تكون محذوفة مسبقاً أو هناك مشكلة في الاتصال." 
-    }
-  }
-}
-
-export async function shareLesson(lessonId: string, updatedContent: any) {
-  try {
-    await prisma.lessonPlan.update({
-      where: { id: lessonId },
-      data: {
-        isPublic: updatedContent,
-      },
+    // Private lesson pages are owner-only. Public community pages must call
+    // getPublicLessonById, which adds isPublic: true to the query.
+    const lesson = await prisma.lessonPlan.findFirst({
+      where: { id, userId },
     });
-    return { success: true, message: " تم تحديث حالة المشاركة بنجاح" };
+
+    if (!lesson) return null;
+
+    return {
+      ...lesson,
+      content: lessonContentSchema.parse(lesson.content),
+    };
   } catch (error) {
-    console.error("فشل تحديث الجذاذة:", error);
-    return { success: false, message: "فشل تحديث حالة المشاركة" };
+    console.error("Failed to fetch private lesson:", error);
+    return null;
   }
 }
 
-
-export async function getPublicLesson() {
+export async function getPublicLessonById(lessonId: string) {
   try {
-    const res = await prisma.lessonPlan.findMany(
-      {where:{ isPublic : true },
-        include: {
-          likes: true, // This populates the likes array
-          user: {
+    const id = lessonIdSchema.parse(lessonId);
+
+    // Public route rule: a shared URL should never reveal private lessons.
+    const lesson = await prisma.lessonPlan.findFirst({
+      where: { id, isPublic: true },
+      include: {
+        user: {
           select: {
             name: true,
             image: true,
           },
         },
-         },
-        }
-     
-    );
-    return { success: true, message: " تم تحديث حالة المشاركة بنجاح" , data: res};
+      },
+    });
+
+    if (!lesson) return null;
+
+    return {
+      ...lesson,
+      content: lessonContentSchema.parse(lesson.content),
+    };
   } catch (error) {
-    console.error("فشل تحديث الجذاذة:", error);
-    return { success: false, message: "فشل تحديث حالة المشاركة" ,data : undefined };
+    console.error("Failed to fetch public lesson:", error);
+    return null;
   }
 }
 
-export async function incrementDownloads(lessonId: string) {
-  if (!lessonId) {
-    return { success: false, error: "Invalid lesson ID" };
-  }
-
+export async function deleteLesson(id: string) {
   try {
-    const updatedLesson = await prisma.lessonPlan.update({
-      where: { id: lessonId },
-      data: {
-        downloadsCount: {
-          increment: 1, 
+    const userId = await requireUserId();
+    const lessonId = lessonIdSchema.parse(id);
+
+    const result = await prisma.lessonPlan.deleteMany({
+      where: { id: lessonId, userId },
+    });
+
+    if (result.count === 0) {
+      return { success: false, error: "Lesson not found or you do not have permission to delete it." };
+    }
+
+    revalidatePath("/");
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to delete lesson:", error);
+    return {
+      success: false,
+      error: "تعذر حذف الجذاذة. قد تكون محذوفة مسبقاً أو ليست ملكاً لك.",
+    };
+  }
+}
+
+export async function shareLesson(lessonId: string, isPublic: boolean) {
+  try {
+    const userId = await requireUserId();
+    const id = lessonIdSchema.parse(lessonId);
+
+    const result = await prisma.lessonPlan.updateMany({
+      where: { id, userId },
+      data: { isPublic },
+    });
+
+    if (result.count === 0) {
+      return { success: false, message: "Lesson not found or you do not have permission to publish it." };
+    }
+
+    return { success: true, message: "تم تحديث حالة المشاركة بنجاح" };
+  } catch (error) {
+    console.error("Failed to update publish status:", error);
+    return { success: false, message: "فشل تحديث حالة المشاركة" };
+  }
+}
+
+export async function getPublicLesson() {
+  try {
+    const lessons = await prisma.lessonPlan.findMany({
+      where: { isPublic: true },
+      include: {
+        likes: true,
+        user: {
+          select: {
+            name: true,
+            image: true,
+          },
         },
       },
     });
 
-  
+    return {
+      success: true,
+      message: "تم تحميل الدروس العمومية بنجاح",
+      data: lessons.map((lesson) => ({
+        ...lesson,
+        content: lessonContentSchema.parse(lesson.content),
+      })),
+    };
+  } catch (error) {
+    console.error("Failed to fetch public lessons:", error);
+    return { success: false, message: "فشل تحميل الدروس العمومية", data: undefined };
+  }
+}
 
-    return { success: true, count: updatedLesson.downloadsCount };
+export async function incrementDownloads(lessonId: string) {
+  try {
+    const session = await getServerSession(authOptions);
+    const userId = (session?.user as { id?: string } | undefined)?.id;
+    const id = lessonIdSchema.parse(lessonId);
+
+    // Downloads are allowed for public lessons, and for the owner on private pages.
+    const result = await prisma.lessonPlan.updateMany({
+      where: {
+        id,
+        OR: [{ isPublic: true }, ...(userId ? [{ userId }] : [])],
+      },
+      data: {
+        downloadsCount: {
+          increment: 1,
+        },
+      },
+    });
+
+    if (result.count === 0) {
+      return { success: false, error: "Lesson not found or not downloadable." };
+    }
+
+    return { success: true };
   } catch (error) {
     console.error("Failed to increment downloads count:", error);
     return { success: false, error: "Database update failed" };

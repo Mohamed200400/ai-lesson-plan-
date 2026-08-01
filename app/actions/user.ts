@@ -1,6 +1,7 @@
 "use server"
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/db"
+import { updateUserSchema, type UpdateUserInput } from "@/lib/validations/user";
 import { getServerSession } from "next-auth";
 
  
@@ -24,7 +25,7 @@ const id = (session.user as { id: string }).id;
     }
 }
 
-export async function updateUser( data : any){
+export async function updateUser(data: UpdateUserInput){
     const session = await getServerSession(authOptions)
       if (!session || !session.user) {
     throw new Error("You must be logged in to like a lesson.");
@@ -32,14 +33,17 @@ export async function updateUser( data : any){
 
 const id = (session.user as { id: string }).id;
     try{
+        // Validate profile data on the server too. Client-side form controls help
+        // the user, but they do not protect the database from crafted requests.
+        const input = updateUserSchema.parse(data)
         const res = await prisma.user.update({
             where : { id : id },
             data : {
-                name : data.name ,
-                email : data.email,
-                phone : data.phone ,
-                country : data.country,
-                defaultLevel : data.level
+                name : input.name ,
+                email : input.email,
+                phone : input.phone ,
+                country : input.country,
+                defaultLevel : input.level
 
             }
         })

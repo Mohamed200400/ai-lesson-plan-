@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState, useTransition } from "react";
-import { deleteLesson, getLessonById, incrementDownloads } from "../../actions/lesson";
+import { getPublicLessonById, incrementDownloads } from "../../actions/lesson";
 import { TopBar } from "@/components/layout/topbar";
 import {
   AlertTriangle,
@@ -12,11 +12,8 @@ import {
 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
-
-interface SectionProps {
-  title: string;
-  children: React.ReactNode;
-}
+import type { LessonContent, LessonPhase } from "@/lib/lesson-content";
+import { LessonSection as Section } from "@/components/lesson/lesson-section";
 
 export default function StaticLessonPage() {
    const params = useParams();
@@ -35,13 +32,12 @@ export default function StaticLessonPage() {
       const html2pdf = (await import('html2pdf.js')).default;
 
       const options = {
-        margin: [10, 10, 10, 10],
+        margin: [10, 10, 10, 10] as [number, number, number, number],
         filename: "download.pdf" ,
-        image: { type: 'jpeg', quality: 0.98 },
+        image: { type: 'jpeg' as const, quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' as const },
       };
-//@ts-ignore
       await html2pdf().set(options).from(contentRef.current).save();
       await incrementDownloads(id)
     } catch (error) {
@@ -55,13 +51,19 @@ export default function StaticLessonPage() {
   const router = useRouter();
  
 
-  const [lesson, setLesson] = useState<any>(null);
+  const [lesson, setLesson] = useState<{
+    title: string;
+    subject: string;
+    level: string;
+    pedagogicalApproach: string;
+    content: LessonContent;
+  } | null>(null);
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     async function fetchLesson() {
       try {
-        const data = await getLessonById(id);
+        const data = await getPublicLessonById(id);
         setLesson(data);
       } catch (err) {
         console.error("Failed to fetch lesson:", err);
@@ -221,7 +223,7 @@ export default function StaticLessonPage() {
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
-                              {data.lessonProcess.map((phase: any, i: number) => (
+                              {data.lessonProcess.map((phase: LessonPhase, i: number) => (
                                 <tr
                                   key={i}
                                   className="align-top hover:bg-gray-50/50 transition-colors"
@@ -281,13 +283,3 @@ export default function StaticLessonPage() {
   );
 }
 
-function Section({ title, children }: SectionProps) {
-  return (
-    <div className="mb-6 bg-gray-50/50 p-4 rounded-xl border border-gray-100 text-right">
-      <h3 className="text-lg font-bold text-[#1e5a8e] mb-3 border-r-4 border-emerald-500 pr-2">
-        {title}
-      </h3>
-      {children}
-    </div>
-  );
-}
