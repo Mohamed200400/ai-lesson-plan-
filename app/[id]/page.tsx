@@ -180,8 +180,8 @@ export default function page() {
 var data = lessonData
   return (
     <div className="min-h-screen">
-      <TopBar placeholder="البحث..." />
-      <div className="px-6 lg:px-10 pb-12">
+    
+      <div className="px-6 lg:px-10 py-12">
        
 
         <div className="mx-auto max-w-7xl" dir="ltr">

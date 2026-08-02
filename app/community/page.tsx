@@ -202,16 +202,17 @@ export default function CommunityPage() {
                 </div>
               }
               {/* Author */}
-              <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center flex-row-reverse justify-between gap-3">
                 <span className="text-caption text-on-surface-variant whitespace-nowrap">{p.createdAt.toLocaleDateString()}</span>
                 <div className="flex items-center gap-3 min-w-0 text-right">
-                  <div className="min-w-0">
-                    <div className="text-label-md font-semibold text-on-surface truncate">{p.user.name}</div>
-                    <div className="text-caption text-on-surface-variant truncate">{}</div>
+                  <div className="min-w-0 flex flex-row gap-3 items-center">
+                   
+                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary-container to-primary shrink-0" >
+                      <img src={p.user?.image ||"https://static.vecteezy.com/system/resources/thumbnails/048/334/475/small/a-person-icon-on-a-transparent-background-png.png"} alt={p.user?.name || "User avatar"}  className="h-10 w-10 rounded-full object-cover" />
+                    </div>
+                     <div className="text-label-md font-semibold text-on-surface truncate">{p.user.name}</div>
                   </div>
-                  <div className="h-10 w-10 rounded-full bg-gradient-to-br from-primary-container to-primary shrink-0" >
-                    <img src={p.user?.image ||"https://static.vecteezy.com/system/resources/thumbnails/048/334/475/small/a-person-icon-on-a-transparent-background-png.png"} alt={p.user?.name || "User avatar"}  className="h-10 w-10 rounded-full object-cover" />
-                  </div>
+                  
                 </div>
               </div>
 

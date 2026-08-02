@@ -4,26 +4,28 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutGrid, Sparkles, Archive, Users, BookOpen, Settings, User } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
+
 
 const nav = [
-  { href: "/", label: "Dashboard", icon: LayoutGrid },
-  { href: "/new-generation", label: "New Generation", icon: Sparkles },
-  { href: "/profile", label: "My Profile", icon: User },
-  { href: "/community", label: "Community Hub", icon: Users },
- 
+  { href: "/", label: "لوحة التحكم", icon: LayoutGrid },
+  { href: "/new-generation", label: "إنشاء الخطة", icon: Sparkles },
+  { href: "/profile", label: "ملفي الشخصي", icon: User },
+  { href: "/community", label: "مركز المجتمع", icon: Users },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
   return (
-    <aside className="hidden md:flex w-[240px] shrink-0 flex-col justify-between border-l border-outline-variant/60 bg-paper px-5 py-6 ">
+    <aside dir="ltr" className="hidden md:flex w-[240px] shrink-0 flex-col justify-between border-l border-outline-variant/60 bg-paper px-5 py-6 ">
       <div>
-        <div className="mb-10 flex items-center justify-between">
-          <div className="h-9 w-9 rounded-md bg-primary" aria-hidden />
-          <div className="text-right">
-            <div className="text-title-lg font-bold text-primary">Gedada</div>
-            <div className="text-caption text-on-surface-variant">AI Lesson Planner</div>
+        <div className="mb-10 flex items-center  justify-between">
+         
+          <div className="text-right pr-4">
+            <div className="text-title-lg font-bold text-primary pb-2">جذاذة</div>
+            <div className="text-caption text-on-surface-variant">مخطط الدروس بالذكاء الاصطناعي</div>
           </div>
+          
         </div>
 
         <nav className="flex flex-col gap-1">
@@ -35,7 +37,7 @@ export function Sidebar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center justify-between rounded-md px-3 py-2.5 text-label-md transition-colors",
+                  "flex items-center justify-end gap-3 rounded-md px-3 py-2.5 text-label-md transition-colors",
                   active
                     ? "bg-surface-low text-primary font-semibold"
                     : "text-on-surface-variant hover:bg-surface-low hover:text-on-surface"

@@ -49,14 +49,14 @@ export default async function DashboardPage() {
               { value: lessonCount , label: "درس تم إنشاؤها" },
             ];
   return (
-    <div className="min-h-screen">
+    <div  className="min-h-screen">
     
 
       <div className="px-6 lg:px-10 py-12 space-y-8">
         {/* Welcome + stats */}
         <Card className="p-6 lg:p-8">
-          <div className="flex flex-col-reverse lg:flex-row lg:items-center lg:justify-between gap-6">
-            <div className="flex flex-wrap gap-3">
+          <div  className="flex flex-col-reverse lg:flex-row-reverse lg:items-center lg:justify-between gap-6">
+            <div  className="flex flex-wrap gap-3 ">
               {stats.map((s) => (
                 <div
                   key={s.label}
@@ -67,7 +67,7 @@ export default async function DashboardPage() {
                 </div>
               ))}
             </div>
-            <div className="text-right">
+            <div dir="ltr" className="flex flex-col">
               <h1 className="text-headline-md font-bold text-on-surface flex items-center justify-end gap-2">
                 
                 مرحباً بعودتك، { session?.user?.name}! <span aria-hidden>👋</span>
@@ -81,8 +81,8 @@ export default async function DashboardPage() {
 
         {/* Quick start */}
         <section>
-          <div className="mb-4 flex items-center justify-end gap-2">
-            <h2 className="text-title-lg font-semibold text-on-surface">البدء السريع</h2>
+          <div className="mb-4 flex items-center justify-start gap-2">
+            <h2 className="text-title-lg font-semibold text-on-surface ">البدء السريع</h2>
             <Zap className="h-5 w-5 text-primary" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -98,8 +98,8 @@ export default async function DashboardPage() {
                 <p className="mt-2 text-body-md text-on-surface-variant">
                   استخدم الذكاء الاصطناعي لتوليد خطة درس متكاملة في ثوانٍ.
                 </p>
-                <Link href="/new-generation"><Button className="mt-4 w-full" size="lg">
-                  <Sparkles className="h-4 w-4" />
+                <Link href="/new-generation"><Button className="mt-4 w-full  text-white" size="lg">
+                  <Sparkles className="h-4 w-4 text-white" />
                   ابدأ التوليد
                 </Button></Link>
               </div>

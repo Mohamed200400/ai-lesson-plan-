@@ -82,8 +82,8 @@ export default function StaticLessonPage() {
 
   return (
     <div className="min-h-screen">
-      <TopBar placeholder="البحث..." />
-      <div className="px-6 lg:px-10 pb-12">
+    
+      <div className="px-6 lg:px-10 py-12">
         <div className="mx-auto max-w-7xl" dir="ltr">
           {data ? (
             <section className="order-2 lg:order-1 border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
